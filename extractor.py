@@ -1,8 +1,17 @@
 import json
+import re
 
 import anthropic
 
 from schemas import Motherboard
+
+
+def parse_json(raw: str) -> dict:
+    raw = raw.strip()
+    fence = re.search(r"```(?:json)?\s*\n(.*?)\n```", raw, re.DOTALL)
+    if fence:
+        raw = fence.group(1).strip()
+    return json.loads(raw)
 
 
 def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
@@ -16,6 +25,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
         system=(
             "You extract structured motherboard specifications from raw text. "
             "Return ONLY valid JSON matching the provided schema. "
+            "No markdown, no explanation, just the JSON object. "
             "If a field cannot be determined from the text, use null."
         ),
         messages=[
@@ -30,7 +40,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
         ],
     )
 
-    data = json.loads(response.content[0].text)
+    data = parse_json(response.content[0].text)
     board = Motherboard(**data)
 
     return board, response.usage
