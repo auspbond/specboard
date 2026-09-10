@@ -1,0 +1,5 @@
+anthropic
+pydantic
+requests
+beautifulsoup4
+duckduckgo-search
