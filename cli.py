@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from fetcher import search, fetch_text, fetch_rendered
+from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 
 MIN_CONTENT_LENGTH = 200
@@ -16,17 +16,19 @@ def _fetch(url: str, rendered: bool) -> str:
 def _fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
     last_error = None
     for i, url in enumerate(urls):
-        try:
-            print(f"  Trying [{i + 1}]: {url}")
-            text = _fetch(url, rendered)
-            if len(text.strip()) < MIN_CONTENT_LENGTH:
-                print(f"    Too little content ({len(text.strip())} chars), skipping")
+        for variant in url_variants(url):
+            suffix = " (fixed encoding)" if variant != url else ""
+            try:
+                print(f"  Trying [{i + 1}]: {variant}{suffix}")
+                text = _fetch(variant, rendered)
+                if len(text.strip()) < MIN_CONTENT_LENGTH:
+                    print(f"    Too little content ({len(text.strip())} chars), skipping")
+                    continue
+                return variant, text
+            except Exception as e:
+                print(f"    Failed: {e}")
+                last_error = e
                 continue
-            return url, text
-        except Exception as e:
-            print(f"    Failed: {e}")
-            last_error = e
-            continue
     raise ValueError(f"All {len(urls)} results failed. Last error: {last_error}")
 
 

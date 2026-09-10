@@ -1,6 +1,19 @@
+from urllib.parse import urlparse, urlunparse
+
 import requests
 from bs4 import BeautifulSoup
 from ddgs import DDGS
+
+
+def url_variants(url: str) -> list[str]:
+    parsed = urlparse(url)
+    variants = [url]
+    # + means space only in query strings, not paths.
+    # DuckDuckGo puts + in paths where %20 belongs.
+    if "+" in parsed.path:
+        fixed = parsed._replace(path=parsed.path.replace("+", "%20"))
+        variants.append(urlunparse(fixed))
+    return variants
 
 
 def search(query: str) -> list[str]:
