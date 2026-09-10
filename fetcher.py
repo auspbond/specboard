@@ -57,7 +57,7 @@ def fetch_rendered(url: str) -> str:
         browser = p.chromium.launch()
         page = browser.new_page()
         page.goto(url, wait_until="domcontentloaded", timeout=15000)
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(5000)
         _click_spec_tab(page)
         html = page.content()
         browser.close()
