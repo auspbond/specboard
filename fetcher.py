@@ -29,6 +29,27 @@ def fetch_text(url: str) -> str:
     return _strip_html(response.text)
 
 
+_SPEC_TAB_PATTERNS = [
+    "Specification",
+    "Specifications",
+    "Specs",
+    "Tech Specs",
+    "Technical Specifications",
+    "Features & Specifications",
+]
+
+
+def _click_spec_tab(page) -> bool:
+    for label in _SPEC_TAB_PATTERNS:
+        tab = page.locator(f"a:text-is('{label}'), button:text-is('{label}')").first
+        if tab.is_visible():
+            tab.click()
+            page.wait_for_timeout(2000)
+            print(f"  Clicked tab: {label}")
+            return True
+    return False
+
+
 def fetch_rendered(url: str) -> str:
     from playwright.sync_api import sync_playwright
 
@@ -37,6 +58,7 @@ def fetch_rendered(url: str) -> str:
         page = browser.new_page()
         page.goto(url, wait_until="domcontentloaded", timeout=15000)
         page.wait_for_timeout(3000)
+        _click_spec_tab(page)
         html = page.content()
         browser.close()
 
