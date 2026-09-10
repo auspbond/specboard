@@ -3,17 +3,15 @@ from bs4 import BeautifulSoup
 from ddgs import DDGS
 
 
-def search(query: str, result_index: int = 0) -> str:
+def search(query: str) -> list[str]:
     with DDGS() as ddgs:
         results = list(ddgs.text(f"{query} motherboard specifications", max_results=5))
     if not results:
         raise ValueError(f"No results found for: {query}")
-    if result_index >= len(results):
-        raise ValueError(f"Only {len(results)} results found, asked for #{result_index + 1}")
-    for i, r in enumerate(results):
-        marker = " <--" if i == result_index else ""
-        print(f"  [{i + 1}] {r['href']}{marker}")
-    return results[result_index]["href"]
+    urls = [r["href"] for r in results]
+    for i, url in enumerate(urls):
+        print(f"  [{i + 1}] {url}")
+    return urls
 
 
 def _strip_html(html: str) -> str:
