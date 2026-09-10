@@ -3,3 +3,4 @@ pydantic
 requests
 beautifulsoup4
 ddgs
+playwright

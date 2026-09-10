@@ -16,13 +16,27 @@ def search(query: str, result_index: int = 0) -> str:
     return results[result_index]["href"]
 
 
+def _strip_html(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup(["script", "style", "nav", "header", "footer", "aside"]):
+        tag.decompose()
+    return soup.get_text(separator="\n", strip=True)
+
+
 def fetch_text(url: str) -> str:
     response = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
     response.raise_for_status()
+    return _strip_html(response.text)
 
-    soup = BeautifulSoup(response.text, "html.parser")
 
-    for tag in soup(["script", "style", "nav", "header", "footer", "aside"]):
-        tag.decompose()
+def fetch_rendered(url: str) -> str:
+    from playwright.sync_api import sync_playwright
 
-    return soup.get_text(separator="\n", strip=True)
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url, wait_until="networkidle")
+        html = page.content()
+        browser.close()
+
+    return _strip_html(html)
