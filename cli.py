@@ -17,6 +17,9 @@ def main():
     parser.add_argument(
         "--rendered", action="store_true", help="Use Playwright to render JS before extracting"
     )
+    parser.add_argument(
+        "--debug", action="store_true", help="Print extracted text instead of sending to LLM"
+    )
     args = parser.parse_args()
 
     if args.url:
@@ -32,6 +35,13 @@ def main():
     else:
         print("Fetching page...")
         text = fetch_text(url)
+
+    if args.debug:
+        print(f"\n--- Extracted text ({len(text)} chars) ---")
+        print(text[:2000])
+        if len(text) > 2000:
+            print(f"\n... ({len(text) - 2000} more chars)")
+        return
 
     print("Extracting specs...")
     board, usage = extract(text)
