@@ -11,7 +11,15 @@ def parse_json(raw: str) -> dict:
     fence = re.search(r"```(?:json)?\s*\n(.*?)\n```", raw, re.DOTALL)
     if fence:
         raw = fence.group(1).strip()
-    return json.loads(raw)
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        start = raw.find("{")
+        end = raw.rfind("}")
+        if start != -1 and end != -1:
+            return json.loads(raw[start:end + 1])
+        print(f"LLM response was not JSON:\n{raw[:500]}")
+        raise
 
 
 def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
