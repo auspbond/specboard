@@ -11,14 +11,17 @@ def main():
     parser.add_argument(
         "--url", action="store_true", help="Treat query as a URL instead of a search term"
     )
+    parser.add_argument(
+        "--result", type=int, default=1, help="Which search result to use (default: 1)"
+    )
     args = parser.parse_args()
 
     if args.url:
         url = args.query
     else:
         print(f"Searching for: {args.query}")
-        url = search(args.query)
-        print(f"Found: {url}")
+        url = search(args.query, result_index=args.result - 1)
+        print(f"Using: {url}")
 
     print("Fetching page...")
     text = fetch_text(url)
