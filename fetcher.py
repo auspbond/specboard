@@ -1,5 +1,7 @@
 from urllib.parse import urlparse, urlunparse
 
+import re
+
 import requests
 from bs4 import BeautifulSoup
 from ddgs import DDGS
@@ -33,18 +35,44 @@ def _is_manufacturer_url(url: str) -> bool:
     return any(m in host.lower() for m in _MANUFACTURERS)
 
 
+def _query_terms(query: str) -> list[str]:
+    return [t.lower() for t in re.split(r"[\s\-]+", query) if len(t) >= 2]
+
+
+def _relevance_score(query_terms: list[str], url: str, title: str) -> int:
+    url_lower = url.lower()
+    title_lower = title.lower()
+    score = 0
+    for term in query_terms:
+        if term in url_lower:
+            score += 2
+        if term in title_lower:
+            score += 1
+    return score
+
+
 def search(query: str) -> list[str]:
     with DDGS() as ddgs:
         results = list(ddgs.text(f"{query} motherboard specifications", max_results=10))
     if not results:
         raise ValueError(f"No results found for: {query}")
-    urls = [r["href"] for r in results]
-    manufacturer = [u for u in urls if _is_manufacturer_url(u)]
-    other = [u for u in urls if not _is_manufacturer_url(u)]
-    urls = manufacturer + other
-    for i, url in enumerate(urls):
-        tag = " (manufacturer)" if _is_manufacturer_url(url) else ""
-        print(f"  [{i + 1}] {url}{tag}")
+
+    terms = _query_terms(query)
+
+    scored = []
+    for r in results:
+        url = r["href"]
+        title = r.get("title", "")
+        mfr = _is_manufacturer_url(url)
+        relevance = _relevance_score(terms, url, title)
+        scored.append((mfr, relevance, url))
+
+    scored.sort(key=lambda x: (not x[0], -x[1]))
+
+    urls = [url for _, _, url in scored]
+    for i, (mfr, relevance, url) in enumerate(scored):
+        tag = " (manufacturer)" if mfr else ""
+        print(f"  [{i + 1}] {url}{tag} (score: {relevance})")
     return urls
 
 
