@@ -70,8 +70,8 @@ def run_eval():
         else:
             from fetcher import search
             urls = search(case["query"])
-            from cli import _fetch_with_fallback
-            url, text = _fetch_with_fallback(urls, rendered)
+            from cli import fetch_with_fallback
+            url, text = fetch_with_fallback(urls, rendered)
 
         print("  Extracting...")
         board, usage = extract(text)
