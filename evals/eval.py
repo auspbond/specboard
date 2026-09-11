@@ -25,7 +25,7 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
     mismatches = []
     for key, exp_val in expected.items():
         act_val = actual.get(key)
-        if key == "usb_ports":
+        if key in ("usb_ports", "audio_jacks"):
             exp_set = {(p["location"], p["type"], p["count"]) for p in exp_val}
             act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:
