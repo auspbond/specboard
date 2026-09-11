@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 from ddgs import DDGS
 
+import cache
+
 
 # ── Constants ──────────────────────────────────────────────────
 
@@ -57,12 +59,23 @@ def search(query: str) -> list[str]:
 
 
 def fetch_text(url: str) -> str:
+    cached = cache.get_page(url, rendered=False)
+    if cached is not None:
+        print("    (cached page)")
+        return cached
     response = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
     response.raise_for_status()
-    return _strip_html(response.text)
+    text = _strip_html(response.text)
+    cache.set_page(url, rendered=False, text=text)
+    return text
 
 
 def fetch_rendered(url: str) -> str:
+    cached = cache.get_page(url, rendered=True)
+    if cached is not None:
+        print("    (cached page)")
+        return cached
+
     from playwright.sync_api import sync_playwright
 
     with sync_playwright() as p:
@@ -74,7 +87,9 @@ def fetch_rendered(url: str) -> str:
         html = page.content()
         browser.close()
 
-    return _strip_html(html)
+    text = _strip_html(html)
+    cache.set_page(url, rendered=True, text=text)
+    return text
 
 
 def url_variants(url: str) -> list[str]:
