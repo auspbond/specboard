@@ -9,11 +9,6 @@ class UsbPort(BaseModel):
     count: int
 
 
-class BiosUpdate(BaseModel):
-    version: str
-    date: str | None = None
-    changelog: str | None = None
-
 
 class Motherboard(BaseModel):
     name: str
@@ -31,4 +26,3 @@ class Motherboard(BaseModel):
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"
     lan_speed_gbps: float | None = None
     audio_codec: str | None = None
-    bios_updates: list[BiosUpdate] = []
