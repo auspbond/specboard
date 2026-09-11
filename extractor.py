@@ -1,8 +1,10 @@
 import json
 import re
+from types import SimpleNamespace
 
 import anthropic
 
+import cache
 from schemas import Motherboard
 
 
@@ -51,8 +53,16 @@ _SYSTEM_PROMPT = (
 # ── Public API ─────────────────────────────────────────────────
 
 def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
-    client = anthropic.Anthropic()
     schema = json.dumps(Motherboard.model_json_schema(), indent=2)
+
+    cached = cache.get_extraction(_SYSTEM_PROMPT, schema, text)
+    if cached is not None:
+        print("  (cached extraction, 0 tokens)")
+        board = Motherboard(**cached["board"])
+        usage = SimpleNamespace(**cached["usage"])
+        return board, usage
+
+    client = anthropic.Anthropic()
 
     response = client.messages.create(
         model="claude-haiku-4-5",
@@ -72,6 +82,14 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
 
     data = _parse_json(response.content[0].text)
     board = Motherboard(**data)
+
+    cache.set_extraction(_SYSTEM_PROMPT, schema, text, {
+        "board": board.model_dump(),
+        "usage": {
+            "input_tokens": response.usage.input_tokens,
+            "output_tokens": response.usage.output_tokens,
+        },
+    })
 
     return board, response.usage
 

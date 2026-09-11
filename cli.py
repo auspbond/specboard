@@ -1,6 +1,7 @@
 import argparse
 import json
 
+import cache
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 from gap_merger import extract_with_gap_fill, MAX_SOURCES
@@ -24,7 +25,13 @@ def main():
     parser.add_argument(
         "--debug", action="store_true", help="Print extracted text instead of sending to LLM"
     )
+    parser.add_argument(
+        "--no-cache", action="store_true", help="Bypass page and extraction cache"
+    )
     args = parser.parse_args()
+
+    if args.no_cache:
+        cache.disable()
 
     if args.url:
         url = args.query

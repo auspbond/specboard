@@ -34,6 +34,9 @@ Thumbs.db
 *.log
 logs/
 
+# Cache
+cache/
+
 # Coverage and test artifacts
 coverage/
 .nyc_output/

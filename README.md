@@ -18,6 +18,7 @@ validator.py     — Content validation (error pages, length, spec keywords)
 extractor.py     — LLM extraction via Claude Haiku, JSON parsing
 gap_merger.py    — Multi-source gap filling, list deduplication, merge logic
 schemas.py       — Pydantic models for motherboard specs
+cache.py         — File-based caching for pages and LLM extractions
 evals/eval.py    — Evaluation framework comparing extraction against ground truth
 ```
 
@@ -57,6 +58,13 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **"none" overwrite**: String fields with the value "none" (like `wifi_bluetooth`) are treated as gaps during merge. If a later source finds "built-in" or "optional module", it overwrites the "none".
 - **Scalar preference**: For non-list fields, takes the first non-null value across sources.
 
+### Caching
+
+- **Two-layer file cache**: Pages and LLM extractions are cached separately under `cache/`. Both the CLI and eval framework benefit automatically since they go through the same `fetcher.py` and `extractor.py` code paths.
+- **Page cache**: Keyed by URL + rendered flag. Eliminates redundant network requests when re-running on the same board or re-running evals.
+- **Extraction cache**: Keyed by a hash of (system prompt + schema + page text). Automatically invalidates when you change the prompt or schema, but hits when only eval logic or ground truth changes.
+- **`--no-cache` flag**: Bypasses both caches for a fresh run. To clear the cache entirely: `rm -rf cache/`.
+
 ### Evaluation
 
 - **Ground truth files**: Hand-verified JSON specs per board stored in `evals/ground_truth/`.
@@ -80,6 +88,9 @@ python cli.py --result 3 "MSI MEG X870E ACE MAX"
 
 # Debug: see fetched text without sending to LLM
 python cli.py --debug "ASRock X670E PG Lightning"
+
+# Bypass cache for a fresh fetch + extraction
+python cli.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Run evaluation against ground truth
 python evals/eval.py
