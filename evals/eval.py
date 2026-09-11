@@ -28,13 +28,13 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
         if key == "accessories":
             continue
         elif key in ("usb_ports", "audio_jacks"):
-            exp_set = {(p["location"], p["type"], p["count"]) for p in exp_val}
-            act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
+            exp_set = {(p["location"], p["type"], p["quantity"]) for p in exp_val}
+            act_set = {(p["location"], p["type"], p["quantity"]) for p in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
         elif key in ("pcie_slots", "m2_slots", "video_ports"):
-            exp_set = {(p["type"], p["count"]) for p in exp_val}
-            act_set = {(p["type"], p["count"]) for p in (act_val or [])}
+            exp_set = {(p["type"], p["quantity"]) for p in exp_val}
+            act_set = {(p["type"], p["quantity"]) for p in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
         elif exp_val != act_val:

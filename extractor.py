@@ -69,7 +69,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
             "'sold separately'.\n"
             "- accessories: List items included in the box (cables, screws, manuals, "
             "I/O shield, antennas, etc.). Use the item name verbatim from the spec page. "
-            "For quantity use the format '1x', '2x', '3x', etc."
+            "Quantity is a plain integer (1, 2, 3)."
         ),
         messages=[
             {
