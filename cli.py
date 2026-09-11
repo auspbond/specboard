@@ -37,11 +37,12 @@ def _fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
                 print(f"  Trying [{i + 1}]: {variant}{suffix}")
                 text = _fetch(variant, rendered)
                 stripped = text.strip()
+                if _looks_like_error_page(stripped):
+                    match = next(p for p in _ERROR_PATTERNS if p in stripped.lower())
+                    print(f"    Error page detected ({match}), skipping")
+                    continue
                 if len(stripped) < MIN_CONTENT_LENGTH:
                     print(f"    Too little content ({len(stripped)} chars), skipping")
-                    continue
-                if _looks_like_error_page(stripped):
-                    print(f"    Looks like an error page, skipping")
                     continue
                 return variant, text
             except Exception as e:
