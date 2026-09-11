@@ -67,6 +67,8 @@ def merge(boards: list[Motherboard]) -> Motherboard:
                 merged[key] = _union_lists(key, current, val)
             elif current is None and val is not None:
                 merged[key] = val
+            elif current == "none" and val not in (None, "none"):
+                merged[key] = val
     return Motherboard(**merged)
 
 
