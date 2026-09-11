@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class UsbPort(BaseModel):
+    location: Literal["rear", "front"]
     type: str
     count: int
 
