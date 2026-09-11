@@ -19,7 +19,6 @@
     "audio_jacks": [],
     "wifi_bluetooth": "none",
     "lan_speed_gbps": null,
-    "audio_codec": null,
-    "accessories": []
+    "audio_codec": null
   }
 }
