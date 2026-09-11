@@ -30,7 +30,7 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
             act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
-        elif key == "pcie_slots":
+        elif key in ("pcie_slots", "m2_slots"):
             exp_set = {(p["type"], p["count"]) for p in exp_val}
             act_set = {(p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:

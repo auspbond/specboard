@@ -8,6 +8,11 @@ class PcieSlot(BaseModel):
     count: int
 
 
+class M2Slot(BaseModel):
+    type: str
+    count: int
+
+
 class UsbPort(BaseModel):
     location: Literal["rear", "front"]
     type: str
@@ -25,7 +30,7 @@ class Motherboard(BaseModel):
     memory_max_speed_mhz: int | None = None
     memory_slots: int | None = None
     pcie_slots: list[PcieSlot] = []
-    m2_slots: int | None = None
+    m2_slots: list[M2Slot] = []
     usb_ports: list[UsbPort] = []
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"
     lan_speed_gbps: float | None = None
