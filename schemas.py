@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -25,8 +27,7 @@ class Motherboard(BaseModel):
     pcie_x16_slots: int | None = None
     m2_slots: int | None = None
     usb_ports: list[UsbPort] = []
-    wifi: bool = False
-    bluetooth: bool = False
+    wireless: Literal["built-in", "optional module", "none"] = "none"
     lan_speed_gbps: float | None = None
     audio_codec: str | None = None
     bios_updates: list[BiosUpdate] = []
