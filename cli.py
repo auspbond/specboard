@@ -12,7 +12,7 @@ from validator import check_content
 
 def main():
     parser = argparse.ArgumentParser(description="Extract motherboard specs using LLM")
-    parser.add_argument("query", help="Motherboard name or URL")
+    parser.add_argument("query", nargs="?", help="Motherboard name or URL")
     parser.add_argument(
         "--url", action="store_true", help="Treat query as a URL instead of a search term"
     )
@@ -28,10 +28,21 @@ def main():
     parser.add_argument(
         "--no-cache", action="store_true", help="Bypass page and extraction cache"
     )
+    parser.add_argument(
+        "--clear-cache", action="store_true", help="Clear all cached pages and extractions"
+    )
     args = parser.parse_args()
+
+    if args.clear_cache:
+        cache.clear()
+        if not args.query:
+            return
 
     if args.no_cache:
         cache.disable()
+
+    if not args.query:
+        parser.error("query is required (unless using --clear-cache)")
 
     if args.url:
         url = args.query
