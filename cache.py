@@ -22,16 +22,19 @@ def get_page(url: str, rendered: bool) -> str | None:
         return None
     path = _page_path(url, rendered)
     if path.exists():
-        return path.read_text()
+        return path.read_text(encoding="utf-8")
     return None
 
 
 def set_page(url: str, rendered: bool, text: str):
     if not _enabled:
         return
-    path = _page_path(url, rendered)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text)
+    try:
+        path = _page_path(url, rendered)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+    except OSError:
+        pass
 
 
 def get_extraction(prompt: str, schema: str, text: str) -> dict | None:
@@ -39,16 +42,19 @@ def get_extraction(prompt: str, schema: str, text: str) -> dict | None:
         return None
     path = _extraction_path(prompt, schema, text)
     if path.exists():
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
     return None
 
 
 def set_extraction(prompt: str, schema: str, text: str, result: dict):
     if not _enabled:
         return
-    path = _extraction_path(prompt, schema, text)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(result, indent=2))
+    try:
+        path = _extraction_path(prompt, schema, text)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    except OSError:
+        pass
 
 
 # ── Helpers ────────────────────────────────────────────────────
