@@ -36,7 +36,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
             "No markdown, no explanation, just the JSON object. "
             "If a field cannot be determined from the text, use null.\n\n"
             "Field guidance:\n"
-            "- wireless: 'built-in' means the board ships with an onboard WiFi/Bluetooth "
+            "- wifi_bluetooth: 'built-in' means the board ships with an onboard WiFi/Bluetooth "
             "chip (e.g. Intel AX211, MediaTek MT7922). 'optional module' means the board "
             "has an M.2 Key E or CNVi slot that accepts a wireless card but does not "
             "include one. 'none' means no wireless support at all. Look for keywords "
