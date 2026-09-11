@@ -3,13 +3,8 @@ import json
 
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
-from schemas import Motherboard
+from merger import extract_with_gap_fill, MAX_SOURCES
 from validator import check_content
-
-
-# ── Constants ──────────────────────────────────────────────────
-
-MAX_SOURCES = 3
 
 
 # ── Public API ─────────────────────────────────────────────────
@@ -56,56 +51,23 @@ def main():
     if args.debug:
         _debug_candidates(urls, args.rendered)
     else:
-        _extract_with_gap_fill(urls, args.rendered)
+        candidates = _fetch_candidates(urls, args.rendered)
+        result = extract_with_gap_fill(candidates, args.rendered)
+        if not result:
+            print("All results failed — no usable content found.")
+            return
+
+        board, sources, total_input, total_output = result
+
+        print(f"\nSources used: {len(sources)}")
+        for i, src in enumerate(sources):
+            print(f"  [{i + 1}] {src}")
+
+        print("\n" + json.dumps(board.model_dump(), indent=2))
+        print(f"\nTokens — input: {total_input}, output: {total_output}")
 
 
 # ── Core logic ─────────────────────────────────────────────────
-
-def _extract_with_gap_fill(urls: list[str], rendered: bool):
-    candidates = _fetch_candidates(urls, rendered)
-    boards = []
-    sources = []
-    total_input = 0
-    total_output = 0
-
-    for url, text in candidates:
-        if len(boards) >= MAX_SOURCES:
-            break
-
-        print(f"Extracting from: {url} ({len(boards) + 1}/{MAX_SOURCES})")
-        board, usage = extract(text)
-        boards.append(board)
-        sources.append(url)
-        total_input += usage.input_tokens
-        total_output += usage.output_tokens
-
-        gaps = _has_gaps(board)
-        if not gaps:
-            print("  All fields filled.")
-            break
-        print(f"  Gaps: {', '.join(gaps)}")
-
-    if not boards:
-        print("All results failed — no usable content found.")
-        return
-
-    if len(boards) > 1:
-        result = _merge(boards)
-        remaining = _has_gaps(result)
-        if remaining:
-            print(f"After merge, still missing: {', '.join(remaining)}")
-        else:
-            print("Merge filled all gaps.")
-    else:
-        result = boards[0]
-
-    print(f"\nSources used: {len(sources)}")
-    for i, src in enumerate(sources):
-        print(f"  [{i + 1}] {src}")
-
-    print("\n" + json.dumps(result.model_dump(), indent=2))
-    print(f"\nTokens — input: {total_input}, output: {total_output}")
-
 
 def _fetch_candidates(urls: list[str], rendered: bool):
     for i, url in enumerate(urls):
@@ -162,27 +124,6 @@ def _debug_candidates(urls: list[str], rendered: bool):
         print(text[:2000])
         if len(text) > 2000:
             print(f"\n... ({len(text) - 2000} more chars)")
-
-
-def _has_gaps(board: Motherboard) -> list[str]:
-    gaps = []
-    for key, val in board.model_dump().items():
-        if val is None or val == []:
-            gaps.append(key)
-    return gaps
-
-
-def _merge(boards: list[Motherboard]) -> Motherboard:
-    merged = boards[0].model_dump()
-    for board in boards[1:]:
-        for key, val in board.model_dump().items():
-            current = merged[key]
-            if isinstance(current, list) and isinstance(val, list):
-                if len(val) > len(current):
-                    merged[key] = val
-            elif current is None and val is not None:
-                merged[key] = val
-    return Motherboard(**merged)
 
 
 if __name__ == "__main__":
