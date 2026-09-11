@@ -16,14 +16,35 @@ def url_variants(url: str) -> list[str]:
     return variants
 
 
+_MANUFACTURERS = [
+    "asrock",
+    "asus",
+    "biostar",
+    "evga",
+    "gigabyte",
+    "msi",
+    "nzxt",
+    "supermicro",
+]
+
+
+def _is_manufacturer_url(url: str) -> bool:
+    host = urlparse(url).hostname or ""
+    return any(m in host.lower() for m in _MANUFACTURERS)
+
+
 def search(query: str) -> list[str]:
     with DDGS() as ddgs:
         results = list(ddgs.text(f"{query} motherboard specifications", max_results=5))
     if not results:
         raise ValueError(f"No results found for: {query}")
     urls = [r["href"] for r in results]
+    manufacturer = [u for u in urls if _is_manufacturer_url(u)]
+    other = [u for u in urls if not _is_manufacturer_url(u)]
+    urls = manufacturer + other
     for i, url in enumerate(urls):
-        print(f"  [{i + 1}] {url}")
+        tag = " (manufacturer)" if _is_manufacturer_url(url) else ""
+        print(f"  [{i + 1}] {url}{tag}")
     return urls
 
 
