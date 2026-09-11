@@ -25,12 +25,19 @@ class AudioJack(BaseModel):
     count: int
 
 
+class VideoPort(BaseModel):
+    type: str
+    count: int
+
+
 class Motherboard(BaseModel):
     name: str
     manufacturer: str
     chipset: str
     socket: str
     form_factor: str
+    graphics_chip: str | None = None
+    video_ports: list[VideoPort] = []
     memory_type: str
     memory_max_gb: int | None = None
     memory_max_speed_mhz: int | None = None
