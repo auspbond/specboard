@@ -36,7 +36,6 @@ class Motherboard(BaseModel):
     chipset: str
     socket: str
     form_factor: str
-    graphics_chip: str | None = None
     video_ports: list[VideoPort] = []
     memory_type: str
     memory_max_gb: int | None = None
