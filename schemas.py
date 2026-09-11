@@ -3,11 +3,15 @@ from typing import Literal
 from pydantic import BaseModel
 
 
+class PcieSlot(BaseModel):
+    type: str
+    count: int
+
+
 class UsbPort(BaseModel):
     location: Literal["rear", "front"]
     type: str
     count: int
-
 
 
 class Motherboard(BaseModel):
@@ -20,7 +24,7 @@ class Motherboard(BaseModel):
     memory_max_gb: int | None = None
     memory_max_speed_mhz: int | None = None
     memory_slots: int | None = None
-    pcie_x16_slots: int | None = None
+    pcie_slots: list[PcieSlot] = []
     m2_slots: int | None = None
     usb_ports: list[UsbPort] = []
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"

@@ -12,7 +12,7 @@
     "memory_max_gb": null,
     "memory_max_speed_mhz": null,
     "memory_slots": null,
-    "pcie_x16_slots": null,
+    "pcie_slots": [],
     "m2_slots": null,
     "usb_ports": [],
     "wifi_bluetooth": "none",
