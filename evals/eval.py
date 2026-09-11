@@ -26,8 +26,8 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
     for key, exp_val in expected.items():
         act_val = actual.get(key)
         if key == "usb_ports":
-            exp_set = {(p["type"], p["count"]) for p in exp_val}
-            act_set = {(p["type"], p["count"]) for p in (act_val or [])}
+            exp_set = {(p["location"], p["type"], p["count"]) for p in exp_val}
+            act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
         elif key == "bios_updates":
