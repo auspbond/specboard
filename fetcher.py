@@ -135,10 +135,14 @@ def _strip_html(html: str) -> str:
 
 def _click_spec_tab(page) -> bool:
     for label in _SPEC_TAB_PATTERNS:
-        tab = page.locator(f"a:text-is('{label}'), button:text-is('{label}')").first
-        if tab.is_visible():
-            tab.click()
-            page.wait_for_timeout(2000)
-            print(f"  Clicked tab: {label}")
-            return True
+        tab = page.locator(f"text='{label}'").first
+        try:
+            if tab.is_visible(timeout=500):
+                tab.click()
+                page.wait_for_timeout(2000)
+                print(f"    Clicked tab: {label}")
+                return True
+        except Exception:
+            continue
+    print("    No spec tab found")
     return False
