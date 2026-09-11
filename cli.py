@@ -148,7 +148,7 @@ def _fetch_candidates(urls: list[str], rendered: bool):
                 continue
 
 
-def _fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
+def fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
     for url, text in _fetch_candidates(urls, rendered):
         return url, text
     raise ValueError(f"All {len(urls)} results failed")
