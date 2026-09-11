@@ -3,7 +3,7 @@ import json
 
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
-from merger import extract_with_gap_fill, MAX_SOURCES
+from gap_merger import extract_with_gap_fill, MAX_SOURCES
 from validator import check_content
 
 
