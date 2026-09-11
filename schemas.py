@@ -5,34 +5,34 @@ from pydantic import BaseModel
 
 class PcieSlot(BaseModel):
     type: str
-    count: int
+    quantity: int
 
 
 class M2Slot(BaseModel):
     type: str
-    count: int
+    quantity: int
 
 
 class UsbPort(BaseModel):
     location: Literal["rear", "front"]
     type: str
-    count: int
+    quantity: int
 
 
 class AudioJack(BaseModel):
     location: Literal["rear", "front"]
     type: str
-    count: int
+    quantity: int
 
 
 class VideoPort(BaseModel):
     type: str
-    count: int
+    quantity: int
 
 
 class Accessory(BaseModel):
     name: str
-    quantity: str
+    quantity: int
 
 
 class Motherboard(BaseModel):
