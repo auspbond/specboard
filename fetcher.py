@@ -35,7 +35,7 @@ def _is_manufacturer_url(url: str) -> bool:
 
 def search(query: str) -> list[str]:
     with DDGS() as ddgs:
-        results = list(ddgs.text(f"{query} motherboard specifications", max_results=5))
+        results = list(ddgs.text(f"{query} motherboard specifications", max_results=10))
     if not results:
         raise ValueError(f"No results found for: {query}")
     urls = [r["href"] for r in results]
