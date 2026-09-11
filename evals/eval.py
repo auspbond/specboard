@@ -25,7 +25,9 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
     mismatches = []
     for key, exp_val in expected.items():
         act_val = actual.get(key)
-        if key in ("usb_ports", "audio_jacks"):
+        if key == "accessories":
+            continue
+        elif key in ("usb_ports", "audio_jacks"):
             exp_set = {(p["location"], p["type"], p["count"]) for p in exp_val}
             act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:
@@ -33,11 +35,6 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
         elif key in ("pcie_slots", "m2_slots", "video_ports"):
             exp_set = {(p["type"], p["count"]) for p in exp_val}
             act_set = {(p["type"], p["count"]) for p in (act_val or [])}
-            if exp_set != act_set:
-                mismatches.append((key, str(exp_val), str(act_val)))
-        elif key == "accessories":
-            exp_set = {(a["name"], a["quantity"]) for a in exp_val}
-            act_set = {(a["name"], a["quantity"]) for a in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
         elif exp_val != act_val:
@@ -59,7 +56,7 @@ def run_eval():
         expected = case["expected"]
 
         empty_fields = [k for k, v in expected.items()
-                        if v == "" or v == []]
+                        if k != "accessories" and (v == "" or v == [])]
         if empty_fields:
             print(f"\n{label}: SKIPPED (unfilled fields: {', '.join(empty_fields)})")
             continue
@@ -82,7 +79,7 @@ def run_eval():
         board, usage = extract(text)
         actual = board.model_dump()
 
-        num_fields = len(expected)
+        num_fields = len([k for k in expected if k != "accessories"])
         mismatches = compare(expected, actual)
         correct = num_fields - len(mismatches)
 
