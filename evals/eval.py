@@ -30,8 +30,6 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
             act_set = {(p["location"], p["type"], p["count"]) for p in (act_val or [])}
             if exp_set != act_set:
                 mismatches.append((key, str(exp_val), str(act_val)))
-        elif key == "bios_updates":
-            continue
         elif exp_val != act_val:
             mismatches.append((key, str(exp_val), str(act_val)))
     return mismatches
@@ -51,7 +49,7 @@ def run_eval():
         expected = case["expected"]
 
         empty_fields = [k for k, v in expected.items()
-                        if v == "" or (k != "bios_updates" and v == [])]
+                        if v == "" or v == []]
         if empty_fields:
             print(f"\n{label}: SKIPPED (unfilled fields: {', '.join(empty_fields)})")
             continue
@@ -74,8 +72,7 @@ def run_eval():
         board, usage = extract(text)
         actual = board.model_dump()
 
-        scorable = {k: v for k, v in expected.items() if k != "bios_updates"}
-        num_fields = len(scorable)
+        num_fields = len(expected)
         mismatches = compare(expected, actual)
         correct = num_fields - len(mismatches)
 

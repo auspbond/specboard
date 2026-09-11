@@ -17,7 +17,6 @@
     "usb_ports": [],
     "wifi_bluetooth": "none",
     "lan_speed_gbps": null,
-    "audio_codec": null,
-    "bios_updates": []
+    "audio_codec": null
   }
 }
