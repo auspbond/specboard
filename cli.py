@@ -4,7 +4,22 @@ import json
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 
-MIN_CONTENT_LENGTH = 200
+MIN_CONTENT_LENGTH = 500
+
+_ERROR_PATTERNS = [
+    "access denied",
+    "403 forbidden",
+    "404 not found",
+    "page not found",
+    "checking your browser",
+    "enable javascript",
+    "reference #",
+]
+
+
+def _looks_like_error_page(text: str) -> bool:
+    lower = text.lower()
+    return any(p in lower for p in _ERROR_PATTERNS)
 
 
 def _fetch(url: str, rendered: bool) -> str:
@@ -21,8 +36,12 @@ def _fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
             try:
                 print(f"  Trying [{i + 1}]: {variant}{suffix}")
                 text = _fetch(variant, rendered)
-                if len(text.strip()) < MIN_CONTENT_LENGTH:
-                    print(f"    Too little content ({len(text.strip())} chars), skipping")
+                stripped = text.strip()
+                if len(stripped) < MIN_CONTENT_LENGTH:
+                    print(f"    Too little content ({len(stripped)} chars), skipping")
+                    continue
+                if _looks_like_error_page(stripped):
+                    print(f"    Looks like an error page, skipping")
                     continue
                 return variant, text
             except Exception as e:
