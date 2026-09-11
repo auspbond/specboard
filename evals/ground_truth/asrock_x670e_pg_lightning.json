@@ -1,0 +1,23 @@
+{
+  "query": "ASROCK X670E PG Lightning",
+  "url": "https://pg.asrock.com/MB/AMD/X670E%20PG%20Lightning/index.asp",
+  "rendered": true,
+  "expected": {
+    "name": "",
+    "manufacturer": "",
+    "chipset": "",
+    "socket": "",
+    "form_factor": "",
+    "memory_type": "",
+    "memory_max_gb": null,
+    "memory_max_speed_mhz": null,
+    "memory_slots": null,
+    "pcie_x16_slots": null,
+    "m2_slots": null,
+    "usb_ports": [],
+    "wifi_bluetooth": "none",
+    "lan_speed_gbps": null,
+    "audio_codec": null,
+    "bios_updates": []
+  }
+}
