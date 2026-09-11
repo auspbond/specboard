@@ -19,6 +19,12 @@ class UsbPort(BaseModel):
     count: int
 
 
+class AudioJack(BaseModel):
+    location: Literal["rear", "front"]
+    type: str
+    count: int
+
+
 class Motherboard(BaseModel):
     name: str
     manufacturer: str
@@ -33,5 +39,6 @@ class Motherboard(BaseModel):
     m2_slots: list[M2Slot] = []
     usb_ports: list[UsbPort] = []
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"
+    audio_jacks: list[AudioJack] = []
     lan_speed_gbps: float | None = None
     audio_codec: str | None = None
