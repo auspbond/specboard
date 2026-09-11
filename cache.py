@@ -22,12 +22,15 @@ def get_page(url: str, rendered: bool) -> str | None:
         return None
     path = _page_path(url, rendered)
     if path.exists():
-        return path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8")
+        if text:
+            return text
+        path.unlink()
     return None
 
 
 def set_page(url: str, rendered: bool, text: str):
-    if not _enabled:
+    if not _enabled or not text:
         return
     try:
         path = _page_path(url, rendered)
