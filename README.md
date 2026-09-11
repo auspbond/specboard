@@ -63,7 +63,8 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **Two-layer file cache**: Pages and LLM extractions are cached separately under `cache/`. Both the CLI and eval framework benefit automatically since they go through the same `fetcher.py` and `extractor.py` code paths.
 - **Page cache**: Keyed by URL + rendered flag. Eliminates redundant network requests when re-running on the same board or re-running evals.
 - **Extraction cache**: Keyed by a hash of (system prompt + schema + page text). Automatically invalidates when you change the prompt or schema, but hits when only eval logic or ground truth changes.
-- **`--no-cache` flag**: Bypasses both caches for a fresh run. To clear the cache entirely: `rm -rf cache/`.
+- **`--no-cache` flag**: Bypasses both caches for a fresh run without clearing stored entries.
+- **`--clear-cache` flag**: Wipes all cached pages and extractions. Can run standalone or before a query.
 
 ### Evaluation
 
@@ -91,6 +92,12 @@ python cli.py --debug "ASRock X670E PG Lightning"
 
 # Bypass cache for a fresh fetch + extraction
 python cli.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+
+# Clear all cached pages and extractions
+python cli.py --clear-cache
+
+# Clear cache, then run a fresh query
+python cli.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Run evaluation against ground truth
 python evals/eval.py
