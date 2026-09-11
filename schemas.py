@@ -30,6 +30,11 @@ class VideoPort(BaseModel):
     count: int
 
 
+class Accessory(BaseModel):
+    name: str
+    quantity: str
+
+
 class Motherboard(BaseModel):
     name: str
     manufacturer: str
@@ -48,3 +53,4 @@ class Motherboard(BaseModel):
     audio_jacks: list[AudioJack] = []
     lan_speed_gbps: float | None = None
     audio_codec: str | None = None
+    accessories: list[Accessory] = []
