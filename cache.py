@@ -1,5 +1,6 @@
 import hashlib
 import json
+import shutil
 from pathlib import Path
 
 
@@ -15,6 +16,15 @@ _enabled = True
 def disable():
     global _enabled
     _enabled = False
+
+
+def clear():
+    if _CACHE_DIR.exists():
+        count = sum(1 for _ in _CACHE_DIR.rglob("*") if _.is_file())
+        shutil.rmtree(_CACHE_DIR)
+        print(f"Cleared {count} cached files.")
+    else:
+        print("Cache is empty.")
 
 
 def get_page(url: str, rendered: bool) -> str | None:
