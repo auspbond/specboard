@@ -5,6 +5,7 @@ from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 
 MIN_CONTENT_LENGTH = 500
+MIN_SPEC_KEYWORDS = 3
 
 _ERROR_PATTERNS = [
     "access denied",
@@ -16,10 +17,22 @@ _ERROR_PATTERNS = [
     "reference #",
 ]
 
+_SPEC_KEYWORDS = [
+    "socket", "chipset", "ddr", "pcie", "memory",
+    "form factor", "atx", "usb", "sata", "m.2",
+    "dimm", "audio", "ethernet", "lan", "bios",
+]
+
 
 def _looks_like_error_page(text: str) -> bool:
     lower = text.lower()
     return any(p in lower for p in _ERROR_PATTERNS)
+
+
+def _has_spec_content(text: str) -> bool:
+    lower = text.lower()
+    hits = sum(1 for kw in _SPEC_KEYWORDS if kw in lower)
+    return hits >= MIN_SPEC_KEYWORDS
 
 
 def _fetch(url: str, rendered: bool) -> str:
@@ -43,6 +56,9 @@ def _fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
                     continue
                 if len(stripped) < MIN_CONTENT_LENGTH:
                     print(f"    Too little content ({len(stripped)} chars), skipping")
+                    continue
+                if not _has_spec_content(stripped):
+                    print(f"    No spec content detected, skipping")
                     continue
                 return variant, text
             except Exception as e:
