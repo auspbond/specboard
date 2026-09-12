@@ -106,7 +106,7 @@ python evals/eval.py
 ## Setup
 
 ```bash
-pip install -r requirements.txt
+pip install .
 playwright install chromium
 ```
 

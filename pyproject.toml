@@ -1,0 +1,16 @@
+[project]
+name = "pilot"
+version = "0.1.0"
+description = "LLM-powered motherboard specification extractor"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic",
+    "pydantic",
+    "requests",
+    "beautifulsoup4",
+    "ddgs",
+    "playwright",
+]
+
+[project.scripts]
+pilot = "cli:main"
