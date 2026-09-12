@@ -1,3 +1,4 @@
+import logging
 import re
 from urllib.parse import urlparse, urlunparse
 
@@ -6,6 +7,8 @@ from bs4 import BeautifulSoup
 from ddgs import DDGS
 
 import cache
+
+logger = logging.getLogger(__name__)
 
 
 # ── Constants ──────────────────────────────────────────────────
@@ -54,14 +57,14 @@ def search(query: str) -> list[str]:
     urls = [url for _, _, url in scored]
     for i, (mfr, relevance, url) in enumerate(scored):
         tag = " (manufacturer)" if mfr else ""
-        print(f"  [{i + 1}] {url}{tag} (score: {relevance})")
+        logger.info("  [%d] %s%s (score: %d)", i + 1, url, tag, relevance)
     return urls
 
 
 def fetch_text(url: str) -> str:
     cached = cache.get_page(url, rendered=False)
     if cached is not None:
-        print("    (cached page)")
+        logger.debug("    (cached page)")
         return cached
     response = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
     response.raise_for_status()
@@ -73,7 +76,7 @@ def fetch_text(url: str) -> str:
 def fetch_rendered(url: str) -> str:
     cached = cache.get_page(url, rendered=True)
     if cached is not None:
-        print("    (cached page)")
+        logger.debug("    (cached page)")
         return cached
 
     from playwright.sync_api import sync_playwright
@@ -140,9 +143,9 @@ def _click_spec_tab(page) -> bool:
             if tab.is_visible(timeout=500):
                 tab.click()
                 page.wait_for_timeout(2000)
-                print(f"    Clicked tab: {label}")
+                logger.debug("    Clicked tab: %s", label)
                 return True
         except Exception:
             continue
-    print("    No spec tab found")
+    logger.debug("    No spec tab found")
     return False

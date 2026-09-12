@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -6,6 +7,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fetcher import fetch_text, fetch_rendered
 from extractor import extract
+
+logger = logging.getLogger(__name__)
 
 
 GROUND_TRUTH_DIR = Path(__file__).parent / "ground_truth"
@@ -41,9 +44,11 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
 
 
 def run_eval():
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+
     cases = load_cases()
     if not cases:
-        print("No ground truth files found.")
+        logger.warning("No ground truth files found.")
         return
 
     total_fields = 0
@@ -65,7 +70,7 @@ def run_eval():
         rendered = case.get("rendered", False)
 
         if url:
-            print(f"  Fetching: {url}")
+            logger.info("  Fetching: %s", url)
             text = fetch_rendered(url) if rendered else fetch_text(url)
         else:
             from fetcher import search
@@ -73,7 +78,7 @@ def run_eval():
             from cli import fetch_with_fallback
             url, text = fetch_with_fallback(urls, rendered)
 
-        print("  Extracting...")
+        logger.info("  Extracting...")
         board, usage = extract(text)
         actual = board.model_dump()
 
