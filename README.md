@@ -16,7 +16,7 @@ cli.py           — CLI entry point, argument parsing, orchestration
 fetcher.py       — DuckDuckGo search, HTTP fetching, Playwright rendering
 validator.py     — Content validation (error pages, length, spec keywords)
 extractor.py     — LLM extraction via Claude Haiku, JSON parsing
-gap_merger.py    — Multi-source gap filling, list deduplication, merge logic
+spec_merger.py   — Multi-source gap filling, list deduplication, merge logic
 schemas.py       — Pydantic models for motherboard specs
 cache.py         — File-based caching for pages and LLM extractions
 evals/eval.py    — Evaluation framework comparing extraction against ground truth
