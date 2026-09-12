@@ -1,11 +1,14 @@
 import argparse
 import json
+import logging
 
 import cache
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 from gap_merger import extract_with_gap_fill, MAX_SOURCES
 from validator import check_content
+
+logger = logging.getLogger(__name__)
 
 
 # ── Public API ─────────────────────────────────────────────────
@@ -26,12 +29,20 @@ def main():
         "--debug", action="store_true", help="Print extracted text instead of sending to LLM"
     )
     parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Show debug-level log messages"
+    )
+    parser.add_argument(
         "--no-cache", action="store_true", help="Bypass page and extraction cache"
     )
     parser.add_argument(
         "--clear-cache", action="store_true", help="Clear all cached pages and extractions"
     )
     args = parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(message)s",
+    )
 
     if args.clear_cache:
         cache.clear()
@@ -46,43 +57,43 @@ def main():
 
     if args.url:
         url = args.query
-        print(f"Fetching: {url}")
+        logger.info("Fetching: %s", url)
         text = _fetch(url, args.rendered)
         _print_or_extract(text, args.debug)
         return
 
-    print(f"Searching for: {args.query}")
+    logger.info("Searching for: %s", args.query)
     urls = search(args.query)
 
     if args.result is not None:
         idx = args.result - 1
         if idx < 0 or idx >= len(urls):
-            print(f"Only {len(urls)} results found, asked for #{args.result}")
+            logger.error("Only %d results found, asked for #%d", len(urls), args.result)
             return
         url = urls[idx]
-        print(f"Using: {url}")
+        logger.info("Using: %s", url)
         text = _fetch(url, args.rendered)
         _print_or_extract(text, args.debug)
         return
 
-    print("Auto-trying results...")
+    logger.info("Auto-trying results...")
     if args.debug:
         _debug_candidates(urls, args.rendered)
     else:
         candidates = _fetch_candidates(urls, args.rendered)
         result = extract_with_gap_fill(candidates, args.rendered)
         if not result:
-            print("All results failed — no usable content found.")
+            logger.error("All results failed — no usable content found.")
             return
 
         board, sources, total_input, total_output = result
 
-        print(f"\nSources used: {len(sources)}")
+        logger.info("\nSources used: %d", len(sources))
         for i, src in enumerate(sources):
-            print(f"  [{i + 1}] {src}")
+            logger.info("  [%d] %s", i + 1, src)
 
         print("\n" + json.dumps(board.model_dump(), indent=2))
-        print(f"\nTokens — input: {total_input}, output: {total_output}")
+        logger.info("\nTokens — input: %d, output: %d", total_input, total_output)
 
 
 # ── Core logic ─────────────────────────────────────────────────
@@ -92,15 +103,15 @@ def _fetch_candidates(urls: list[str], rendered: bool):
         for variant in url_variants(url):
             suffix = " (fixed encoding)" if variant != url else ""
             try:
-                print(f"  Trying [{i + 1}]: {variant}{suffix}")
+                logger.info("  Trying [%d]: %s%s", i + 1, variant, suffix)
                 text = _fetch(variant, rendered)
                 reason = check_content(text)
                 if reason:
-                    print(f"    {reason}, skipping")
+                    logger.warning("    %s, skipping", reason)
                     continue
                 yield variant, text
             except Exception as e:
-                print(f"    Failed: {e}")
+                logger.warning("    Failed: %s", e)
                 continue
 
 
@@ -126,10 +137,10 @@ def _print_or_extract(text: str, debug: bool):
             print(f"\n... ({len(text) - 2000} more chars)")
         return
 
-    print("Extracting specs...")
+    logger.info("Extracting specs...")
     board, usage = extract(text)
     print("\n" + json.dumps(board.model_dump(), indent=2))
-    print(f"\nTokens — input: {usage.input_tokens}, output: {usage.output_tokens}")
+    logger.info("\nTokens — input: %d, output: %d", usage.input_tokens, usage.output_tokens)
 
 
 def _debug_candidates(urls: list[str], rendered: bool):
