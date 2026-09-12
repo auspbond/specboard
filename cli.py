@@ -43,9 +43,8 @@ def main():
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(message)s",
     )
-    logging.getLogger("urllib3").setLevel(logging.WARNING)
-    logging.getLogger("httpx").setLevel(logging.WARNING)
-    logging.getLogger("anthropic").setLevel(logging.WARNING)
+    for name in ("urllib3", "httpx", "anthropic", "ddgs"):
+        logging.getLogger(name).setLevel(logging.WARNING)
 
     if args.clear_cache:
         cache.clear()
