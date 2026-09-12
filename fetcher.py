@@ -1,5 +1,7 @@
 import logging
+import os
 import re
+import sys
 from urllib.parse import urlparse, urlunparse
 
 import requests
@@ -37,8 +39,7 @@ _SPEC_TAB_PATTERNS = [
 # ── Public API ─────────────────────────────────────────────────
 
 def search(query: str) -> list[str]:
-    with DDGS() as ddgs:
-        results = list(ddgs.text(f"{query} motherboard specifications", max_results=10))
+    results = _ddgs_search(f"{query} motherboard specifications")
     if not results:
         raise ValueError(f"No results found for: {query}")
 
@@ -107,6 +108,23 @@ def url_variants(url: str) -> list[str]:
 
 
 # ── Helpers ────────────────────────────────────────────────────
+
+def _ddgs_search(query: str) -> list[dict]:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    old_stdout = os.dup(1)
+    old_stderr = os.dup(2)
+    try:
+        os.dup2(devnull, 1)
+        os.dup2(devnull, 2)
+        with DDGS() as ddgs:
+            return list(ddgs.text(query, max_results=10))
+    finally:
+        os.dup2(old_stdout, 1)
+        os.dup2(old_stderr, 2)
+        os.close(devnull)
+        os.close(old_stdout)
+        os.close(old_stderr)
+
 
 def _is_manufacturer_url(url: str) -> bool:
     host = urlparse(url).hostname or ""
