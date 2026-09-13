@@ -111,5 +111,5 @@ def _parse_json(raw: str) -> dict:
         end = raw.rfind("}")
         if start != -1 and end != -1:
             return json.loads(raw[start:end + 1])
-        log.warning("LLM response was not JSON:\n%s", raw[:500])
+        log.error("LLM response was not JSON:\n%s", raw[:500])
         raise

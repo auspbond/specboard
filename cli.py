@@ -65,7 +65,7 @@ def main():
     if args.result is not None:
         idx = args.result - 1
         if idx < 0 or idx >= len(urls):
-            log.info("Only %d results found, asked for #%d", len(urls), args.result)
+            log.warning("Only %d results found, asked for #%d", len(urls), args.result)
             return
         url = urls[idx]
         log.info("Using: %s", url)
@@ -80,7 +80,7 @@ def main():
         candidates = _fetch_candidates(urls, args.rendered)
         result = extract_with_gap_fill(candidates, args.rendered)
         if not result:
-            log.info("All results failed — no usable content found.")
+            log.error("All results failed — no usable content found.")
             return
 
         board, sources, total_input, total_output = result
@@ -104,11 +104,11 @@ def _fetch_candidates(urls: list[str], rendered: bool):
                 text = _fetch(variant, rendered)
                 reason = check_content(text)
                 if reason:
-                    log.info("    %s, skipping", reason)
+                    log.warning("    %s, skipping", reason)
                     continue
                 yield variant, text
             except Exception as e:
-                log.info("    Failed: %s", e)
+                log.error("    Failed: %s", e)
                 continue
 
 

@@ -49,8 +49,8 @@ def set_page(url: str, rendered: bool, text: str):
         path = _page_path(url, rendered)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(text, encoding="utf-8")
-    except OSError:
-        pass
+    except OSError as e:
+        log.error("Failed to cache page: %s", e)
 
 
 def get_extraction(prompt: str, schema: str, text: str) -> dict | None:
@@ -69,8 +69,8 @@ def set_extraction(prompt: str, schema: str, text: str, result: dict):
         path = _extraction_path(prompt, schema, text)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(result, indent=2), encoding="utf-8")
-    except OSError:
-        pass
+    except OSError as e:
+        log.error("Failed to cache extraction: %s", e)
 
 
 # ── Helpers ────────────────────────────────────────────────────
