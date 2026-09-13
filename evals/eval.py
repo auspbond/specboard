@@ -78,7 +78,7 @@ def run_eval():
         else:
             from fetcher import search
             urls = search(case["query"])
-            from cli import fetch_with_fallback
+            from specboard import fetch_with_fallback
             url, text = fetch_with_fallback(urls, rendered)
 
         log.info("  Extracting...")
