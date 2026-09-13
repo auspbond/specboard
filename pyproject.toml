@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = ["specboard", "fetcher", "extractor", "validator", "spec_merger", "schemas", "cache"]
+py-modules = ["specboard", "fetcher", "extractor", "validator", "spec_merger", "schemas", "cache", "comparator"]
 
 [project.scripts]
 specboard = "specboard:main"
