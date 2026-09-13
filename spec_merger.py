@@ -1,9 +1,5 @@
-import logging
-
 from extractor import extract
 from schemas import Motherboard
-
-logger = logging.getLogger(__name__)
 
 
 # ── Constants ──────────────────────────────────────────────────
@@ -23,7 +19,7 @@ def extract_with_gap_fill(candidates, rendered: bool) -> tuple[Motherboard, list
         if len(boards) >= MAX_SOURCES:
             break
 
-        logger.info("Extracting from: %s (%d/%d)", url, len(boards) + 1, MAX_SOURCES)
+        print(f"Extracting from: {url} ({len(boards) + 1}/{MAX_SOURCES})")
         board, usage = extract(text)
         boards.append(board)
         sources.append(url)
@@ -32,9 +28,9 @@ def extract_with_gap_fill(candidates, rendered: bool) -> tuple[Motherboard, list
 
         gaps = has_gaps(board)
         if not gaps:
-            logger.info("  All fields filled.")
+            print("  All fields filled.")
             break
-        logger.info("  Gaps: %s", ", ".join(gaps))
+        print(f"  Gaps: {', '.join(gaps)}")
 
     if not boards:
         return None
@@ -43,9 +39,9 @@ def extract_with_gap_fill(candidates, rendered: bool) -> tuple[Motherboard, list
         result = merge(boards)
         remaining = has_gaps(result)
         if remaining:
-            logger.warning("After merge, still missing: %s", ", ".join(remaining))
+            print(f"After merge, still missing: {', '.join(remaining)}")
         else:
-            logger.info("Merge filled all gaps.")
+            print("Merge filled all gaps.")
     else:
         result = boards[0]
 

@@ -1,7 +1,4 @@
-import logging
-import os
 import re
-import sys
 from urllib.parse import urlparse, urlunparse
 
 import requests
@@ -9,8 +6,6 @@ from bs4 import BeautifulSoup
 from ddgs import DDGS
 
 import cache
-
-logger = logging.getLogger(__name__)
 
 
 # ── Constants ──────────────────────────────────────────────────
@@ -39,7 +34,8 @@ _SPEC_TAB_PATTERNS = [
 # ── Public API ─────────────────────────────────────────────────
 
 def search(query: str) -> list[str]:
-    results = _ddgs_search(f"{query} motherboard specifications")
+    with DDGS() as ddgs:
+        results = list(ddgs.text(f"{query} motherboard specifications", max_results=10))
     if not results:
         raise ValueError(f"No results found for: {query}")
 
@@ -58,14 +54,14 @@ def search(query: str) -> list[str]:
     urls = [url for _, _, url in scored]
     for i, (mfr, relevance, url) in enumerate(scored):
         tag = " (manufacturer)" if mfr else ""
-        logger.info("  [%d] %s%s (score: %d)", i + 1, url, tag, relevance)
+        print(f"  [{i + 1}] {url}{tag} (score: {relevance})")
     return urls
 
 
 def fetch_text(url: str) -> str:
     cached = cache.get_page(url, rendered=False)
     if cached is not None:
-        logger.debug("    (cached page)")
+        print("    (cached page)")
         return cached
     response = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
     response.raise_for_status()
@@ -77,7 +73,7 @@ def fetch_text(url: str) -> str:
 def fetch_rendered(url: str) -> str:
     cached = cache.get_page(url, rendered=True)
     if cached is not None:
-        logger.debug("    (cached page)")
+        print("    (cached page)")
         return cached
 
     from playwright.sync_api import sync_playwright
@@ -108,23 +104,6 @@ def url_variants(url: str) -> list[str]:
 
 
 # ── Helpers ────────────────────────────────────────────────────
-
-def _ddgs_search(query: str) -> list[dict]:
-    devnull = os.open(os.devnull, os.O_WRONLY)
-    old_stdout = os.dup(1)
-    old_stderr = os.dup(2)
-    try:
-        os.dup2(devnull, 1)
-        os.dup2(devnull, 2)
-        with DDGS() as ddgs:
-            return list(ddgs.text(query, max_results=10))
-    finally:
-        os.dup2(old_stdout, 1)
-        os.dup2(old_stderr, 2)
-        os.close(devnull)
-        os.close(old_stdout)
-        os.close(old_stderr)
-
 
 def _is_manufacturer_url(url: str) -> bool:
     host = urlparse(url).hostname or ""
@@ -161,9 +140,9 @@ def _click_spec_tab(page) -> bool:
             if tab.is_visible(timeout=500):
                 tab.click()
                 page.wait_for_timeout(2000)
-                logger.debug("    Clicked tab: %s", label)
+                print(f"    Clicked tab: {label}")
                 return True
         except Exception:
             continue
-    logger.debug("    No spec tab found")
+    print("    No spec tab found")
     return False
