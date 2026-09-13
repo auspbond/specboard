@@ -17,6 +17,7 @@ _SCALAR_FIELDS = [
     ("wifi_bluetooth", "WiFi/BT"),
     ("sata_ports", "SATA Ports"),
     ("lan_speed_gbps", "LAN (Gbps)"),
+    ("dual_lan", "Dual LAN"),
     ("audio_codec", "Audio Codec"),
 ]
 
