@@ -29,7 +29,7 @@ def main():
         "--result", type=int, default=None, help="Use a specific search result (1-10). Omit to auto-try all."
     )
     parser.add_argument(
-        "--compare", metavar="BOARD", help="Compare query board against another board"
+        "--compare", nargs=2, metavar="BOARD", help="Compare two boards side by side"
     )
     parser.add_argument(
         "--rendered", action="store_true", help="Use Playwright to render JS before extracting"
@@ -53,12 +53,12 @@ def main():
     if args.no_cache:
         cache.disable()
 
-    if not args.query:
-        parser.error("query is required (unless using --clear-cache)")
-
     if args.compare:
-        _run_compare(args.query, args.compare, args.rendered)
+        _run_compare(args.compare[0], args.compare[1], args.rendered)
         return
+
+    if not args.query:
+        parser.error("query is required (unless using --clear-cache or --compare)")
 
     if args.url:
         url = args.query
