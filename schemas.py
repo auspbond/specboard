@@ -48,6 +48,6 @@ class Motherboard(BaseModel):
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"
     audio_jacks: list[AudioJack] = []
     sata_ports: int | None = None
-    lan_speed_gbps: float | None = None
+    lan_max_speed_gbps: float | None = None
     dual_lan: bool = False
     audio_codec: str | None = None
