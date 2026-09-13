@@ -12,6 +12,9 @@ dependencies = [
     "playwright",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest"]
+
 [tool.setuptools]
 py-modules = ["specboard", "fetcher", "extractor", "validator", "spec_merger", "schemas", "cache", "comparator"]
 
