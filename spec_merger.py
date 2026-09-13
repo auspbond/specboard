@@ -43,7 +43,7 @@ def extract_with_gap_fill(candidates, rendered: bool) -> tuple[Motherboard, list
         result = merge(boards)
         remaining = has_gaps(result)
         if remaining:
-            log.info("After merge, still missing: %s", ", ".join(remaining))
+            log.warning("After merge, still missing: %s", ", ".join(remaining))
         else:
             log.info("Merge filled all gaps.")
     else:
