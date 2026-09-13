@@ -13,4 +13,4 @@ dependencies = [
 ]
 
 [project.scripts]
-specboard = "cli:main"
+specboard = "specboard:main"

@@ -12,7 +12,7 @@ An LLM-powered tool that searches for motherboard specification pages, extracts 
 ## Architecture
 
 ```
-cli.py           — CLI entry point, argument parsing, orchestration
+specboard.py     — CLI entry point, argument parsing, orchestration
 fetcher.py       — DuckDuckGo search, HTTP fetching, Playwright rendering
 validator.py     — Content validation (error pages, length, spec keywords)
 extractor.py     — LLM extraction via Claude Haiku, JSON parsing
@@ -68,7 +68,7 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 
 ### Logging
 
-- **Named logger, no `basicConfig()`**: All modules log through `logging.getLogger("specboard")`. The handler is configured only in entry points (`cli.py`, `evals/eval.py`) — never via `basicConfig()`. This is deliberate: `basicConfig()` attaches a handler to the root logger, which causes every third-party library using Python's logging (urllib3, httpx, the Anthropic SDK, ddgs) to emit its own messages through your handler. A named logger avoids this entirely — third-party loggers stay silent because the root logger has no handler.
+- **Named logger, no `basicConfig()`**: All modules log through `logging.getLogger("specboard")`. The handler is configured only in entry points (`specboard.py`, `evals/eval.py`) — never via `basicConfig()`. This is deliberate: `basicConfig()` attaches a handler to the root logger, which causes every third-party library using Python's logging (urllib3, httpx, the Anthropic SDK, ddgs) to emit its own messages through your handler. A named logger avoids this entirely — third-party loggers stay silent because the root logger has no handler.
 - **Log levels**: `info` for normal operational output, `warning` for recoverable issues (content validation skips, incomplete data after merge), `error` for failures (fetch exceptions, unparseable LLM responses, cache write errors).
 - **`%(message)s` format**: Output looks identical to plain `print()` — no timestamps or level prefixes. The structure is there for programmatic filtering if needed later.
 
@@ -82,28 +82,28 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 
 ```bash
 # Search and extract (auto-fallback through results)
-python cli.py "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Use Playwright for JS-heavy pages
-python cli.py --rendered "GIGABYTE X870 AORUS STEALTH ICE"
+python specboard.py --rendered "GIGABYTE X870 AORUS STEALTH ICE"
 
 # Extract from a specific URL
-python cli.py --url "https://example.com/motherboard/specs"
+python specboard.py --url "https://example.com/motherboard/specs"
 
 # Pick a specific search result
-python cli.py --result 3 "MSI MEG X870E ACE MAX"
+python specboard.py --result 3 "MSI MEG X870E ACE MAX"
 
 # Debug: see fetched text without sending to LLM
-python cli.py --debug "ASRock X670E PG Lightning"
+python specboard.py --debug "ASRock X670E PG Lightning"
 
 # Bypass cache for a fresh fetch + extraction
-python cli.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Clear all cached pages and extractions
-python cli.py --clear-cache
+python specboard.py --clear-cache
 
 # Clear cache, then run a fresh query
-python cli.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Run evaluation against ground truth
 python evals/eval.py
