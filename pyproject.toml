@@ -12,5 +12,8 @@ dependencies = [
     "playwright",
 ]
 
+[tool.setuptools]
+py-modules = ["specboard", "fetcher", "extractor", "validator", "spec_merger", "schemas", "cache"]
+
 [project.scripts]
 specboard = "specboard:main"
