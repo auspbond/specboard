@@ -47,5 +47,6 @@ class Motherboard(BaseModel):
     usb_ports: list[UsbPort] = []
     wifi_bluetooth: Literal["built-in", "optional module", "none"] = "none"
     audio_jacks: list[AudioJack] = []
+    sata_ports: int | None = None
     lan_speed_gbps: float | None = None
     audio_codec: str | None = None
