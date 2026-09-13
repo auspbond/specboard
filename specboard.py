@@ -4,6 +4,7 @@ import logging
 import sys
 
 import cache
+from comparator import compare
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 from spec_merger import extract_with_gap_fill, MAX_SOURCES
@@ -26,6 +27,9 @@ def main():
     )
     parser.add_argument(
         "--result", type=int, default=None, help="Use a specific search result (1-10). Omit to auto-try all."
+    )
+    parser.add_argument(
+        "--compare", metavar="BOARD", help="Compare query board against another board"
     )
     parser.add_argument(
         "--rendered", action="store_true", help="Use Playwright to render JS before extracting"
@@ -51,6 +55,10 @@ def main():
 
     if not args.query:
         parser.error("query is required (unless using --clear-cache)")
+
+    if args.compare:
+        _run_compare(args.query, args.compare, args.rendered)
+        return
 
     if args.url:
         url = args.query
@@ -116,6 +124,36 @@ def fetch_with_fallback(urls: list[str], rendered: bool) -> tuple[str, str]:
     for url, text in _fetch_candidates(urls, rendered):
         return url, text
     raise ValueError(f"All {len(urls)} results failed")
+
+
+def _extract_board(query: str, rendered: bool):
+    log.info("Searching for: %s", query)
+    urls = search(query)
+    log.info("Auto-trying results...")
+    candidates = _fetch_candidates(urls, rendered)
+    result = extract_with_gap_fill(candidates, rendered)
+    if not result:
+        log.error("All results failed for: %s", query)
+        return None
+    board, sources, total_input, total_output = result
+    log.info("  Sources: %d, tokens: %d in / %d out",
+             len(sources), total_input, total_output)
+    return board
+
+
+def _run_compare(query_a: str, query_b: str, rendered: bool):
+    log.info("=== Extracting board 1 ===")
+    board_a = _extract_board(query_a, rendered)
+    if not board_a:
+        return
+
+    log.info("\n=== Extracting board 2 ===")
+    board_b = _extract_board(query_b, rendered)
+    if not board_b:
+        return
+
+    log.info("\n=== Comparison ===")
+    compare(board_a, board_b)
 
 
 # ── Helpers ────────────────────────────────────────────────────
