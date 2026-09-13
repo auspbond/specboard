@@ -1,10 +1,7 @@
 import hashlib
 import json
-import logging
 import shutil
 from pathlib import Path
-
-logger = logging.getLogger(__name__)
 
 
 # ── Constants ──────────────────────────────────────────────────
@@ -25,9 +22,9 @@ def clear():
     if _CACHE_DIR.exists():
         count = sum(1 for _ in _CACHE_DIR.rglob("*") if _.is_file())
         shutil.rmtree(_CACHE_DIR)
-        logger.info("Cleared %d cached files.", count)
+        print(f"Cleared {count} cached files.")
     else:
-        logger.info("Cache is empty.")
+        print("Cache is empty.")
 
 
 def get_page(url: str, rendered: bool) -> str | None:

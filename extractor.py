@@ -1,5 +1,4 @@
 import json
-import logging
 import re
 from types import SimpleNamespace
 
@@ -7,8 +6,6 @@ import anthropic
 
 import cache
 from schemas import Motherboard
-
-logger = logging.getLogger(__name__)
 
 
 # ── Constants ──────────────────────────────────────────────────
@@ -60,7 +57,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
 
     cached = cache.get_extraction(_SYSTEM_PROMPT, schema, text)
     if cached is not None:
-        logger.debug("  (cached extraction, 0 tokens)")
+        print("  (cached extraction, 0 tokens)")
         board = Motherboard(**cached["board"])
         usage = SimpleNamespace(**cached["usage"])
         return board, usage
@@ -111,5 +108,5 @@ def _parse_json(raw: str) -> dict:
         end = raw.rfind("}")
         if start != -1 and end != -1:
             return json.loads(raw[start:end + 1])
-        logger.error("LLM response was not JSON:\n%s", raw[:500])
+        print(f"LLM response was not JSON:\n{raw[:500]}")
         raise
