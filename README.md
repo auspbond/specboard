@@ -17,6 +17,7 @@ fetcher.py       — DuckDuckGo search, HTTP fetching, Playwright rendering
 validator.py     — Content validation (error pages, length, spec keywords)
 extractor.py     — LLM extraction via Claude Haiku, JSON parsing
 spec_merger.py   — Multi-source gap filling, list deduplication, merge logic
+comparator.py    — Side-by-side board comparison display
 schemas.py       — Pydantic models for motherboard specs
 cache.py         — File-based caching for pages and LLM extractions
 evals/eval.py    — Evaluation framework comparing extraction against ground truth
@@ -72,6 +73,13 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **Log levels**: `info` for normal operational output, `warning` for recoverable issues (content validation skips, incomplete data after merge), `error` for failures (fetch exceptions, unparseable LLM responses, cache write errors).
 - **`%(message)s` format**: Output looks identical to plain `print()` — no timestamps or level prefixes. The structure is there for programmatic filtering if needed later.
 
+### Comparison
+
+- **Reuses extraction pipeline**: `--compare` runs the full search-fetch-extract-merge pipeline for both boards independently, so no new code paths or API logic — just two normal extractions followed by a diff.
+- **Scalar fields**: Displayed side by side. Fields that differ are marked with `*`.
+- **List fields**: Uses set comparison on key tuples (same keys as eval and merge). Shows entries common to both boards, then entries unique to each.
+- **No extra cost**: Each board costs the same as a normal extraction. Cached boards cost nothing.
+
 ### Evaluation
 
 - **Ground truth files**: Hand-verified JSON specs per board stored in `evals/ground_truth/`.
@@ -104,6 +112,9 @@ python specboard.py --clear-cache
 
 # Clear cache, then run a fresh query
 python specboard.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+
+# Compare two boards side by side
+python specboard.py "ASUS ROG STRIX Z790-E Gaming WiFi" --compare "MSI MEG Z790 ACE MAX" --rendered
 
 # Run evaluation against ground truth
 python evals/eval.py
