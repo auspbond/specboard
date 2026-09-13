@@ -18,7 +18,7 @@
     "usb_ports": [],
     "audio_jacks": [],
     "wifi_bluetooth": "none",
-    "lan_speed_gbps": null,
+    "lan_max_speed_gbps": null,
     "audio_codec": null
   }
 }

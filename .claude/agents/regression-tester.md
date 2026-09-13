@@ -51,7 +51,7 @@ This is the most important part. Fetch the board's manufacturer spec page yourse
 - **video_ports**: Correct types and versions?
 - **audio_jacks**: Rear vs front separation correct?
 - **wifi_bluetooth**: "built-in", "optional module", or "none" — does it match reality?
-- **lan_speed_gbps**: Correct?
+- **lan_max_speed_gbps**: Correct?
 - **audio_codec**: Correct chip?
 
 ### Error handling
