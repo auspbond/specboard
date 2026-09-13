@@ -9,7 +9,7 @@ from extractor import extract
 from spec_merger import extract_with_gap_fill, MAX_SOURCES
 from validator import check_content
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 log.setLevel(logging.INFO)
 _handler = logging.StreamHandler(sys.stdout)
 _handler.setFormatter(logging.Formatter("%(message)s"))

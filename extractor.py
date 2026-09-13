@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import anthropic
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 
 import cache
 from schemas import Motherboard

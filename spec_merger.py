@@ -3,7 +3,7 @@ import logging
 from extractor import extract
 from schemas import Motherboard
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 
 
 # ── Constants ──────────────────────────────────────────────────
