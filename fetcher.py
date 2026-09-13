@@ -47,6 +47,8 @@ def search(query: str) -> list[str]:
     scored = []
     for r in results:
         url = r["href"]
+        if url.lower().endswith(".pdf"):
+            continue
         title = r.get("title", "")
         mfr = _is_manufacturer_url(url)
         relevance = _relevance_score(terms, url, title)
