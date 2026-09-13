@@ -1,11 +1,19 @@
 import argparse
 import json
+import logging
+import sys
 
 import cache
 from fetcher import search, fetch_text, fetch_rendered, url_variants
 from extractor import extract
 from spec_merger import extract_with_gap_fill, MAX_SOURCES
 from validator import check_content
+
+log = logging.getLogger("pilot")
+log.setLevel(logging.INFO)
+_handler = logging.StreamHandler(sys.stdout)
+_handler.setFormatter(logging.Formatter("%(message)s"))
+log.addHandler(_handler)
 
 
 # ── Public API ─────────────────────────────────────────────────
@@ -46,43 +54,43 @@ def main():
 
     if args.url:
         url = args.query
-        print(f"Fetching: {url}")
+        log.info("Fetching: %s", url)
         text = _fetch(url, args.rendered)
         _print_or_extract(text, args.debug)
         return
 
-    print(f"Searching for: {args.query}")
+    log.info("Searching for: %s", args.query)
     urls = search(args.query)
 
     if args.result is not None:
         idx = args.result - 1
         if idx < 0 or idx >= len(urls):
-            print(f"Only {len(urls)} results found, asked for #{args.result}")
+            log.info("Only %d results found, asked for #%d", len(urls), args.result)
             return
         url = urls[idx]
-        print(f"Using: {url}")
+        log.info("Using: %s", url)
         text = _fetch(url, args.rendered)
         _print_or_extract(text, args.debug)
         return
 
-    print("Auto-trying results...")
+    log.info("Auto-trying results...")
     if args.debug:
         _debug_candidates(urls, args.rendered)
     else:
         candidates = _fetch_candidates(urls, args.rendered)
         result = extract_with_gap_fill(candidates, args.rendered)
         if not result:
-            print("All results failed — no usable content found.")
+            log.info("All results failed — no usable content found.")
             return
 
         board, sources, total_input, total_output = result
 
-        print(f"\nSources used: {len(sources)}")
+        log.info("\nSources used: %d", len(sources))
         for i, src in enumerate(sources):
-            print(f"  [{i + 1}] {src}")
+            log.info("  [%d] %s", i + 1, src)
 
-        print("\n" + json.dumps(board.model_dump(), indent=2))
-        print(f"\nTokens — input: {total_input}, output: {total_output}")
+        log.info("\n%s", json.dumps(board.model_dump(), indent=2))
+        log.info("\nTokens — input: %d, output: %d", total_input, total_output)
 
 
 # ── Core logic ─────────────────────────────────────────────────
@@ -92,15 +100,15 @@ def _fetch_candidates(urls: list[str], rendered: bool):
         for variant in url_variants(url):
             suffix = " (fixed encoding)" if variant != url else ""
             try:
-                print(f"  Trying [{i + 1}]: {variant}{suffix}")
+                log.info("  Trying [%d]: %s%s", i + 1, variant, suffix)
                 text = _fetch(variant, rendered)
                 reason = check_content(text)
                 if reason:
-                    print(f"    {reason}, skipping")
+                    log.info("    %s, skipping", reason)
                     continue
                 yield variant, text
             except Exception as e:
-                print(f"    Failed: {e}")
+                log.info("    Failed: %s", e)
                 continue
 
 
@@ -120,16 +128,16 @@ def _fetch(url: str, rendered: bool) -> str:
 
 def _print_or_extract(text: str, debug: bool):
     if debug:
-        print(f"\n--- Extracted text ({len(text)} chars) ---")
-        print(text[:2000])
+        log.info("\n--- Extracted text (%d chars) ---", len(text))
+        log.info(text[:2000])
         if len(text) > 2000:
-            print(f"\n... ({len(text) - 2000} more chars)")
+            log.info("\n... (%d more chars)", len(text) - 2000)
         return
 
-    print("Extracting specs...")
+    log.info("Extracting specs...")
     board, usage = extract(text)
-    print("\n" + json.dumps(board.model_dump(), indent=2))
-    print(f"\nTokens — input: {usage.input_tokens}, output: {usage.output_tokens}")
+    log.info("\n%s", json.dumps(board.model_dump(), indent=2))
+    log.info("\nTokens — input: %d, output: %d", usage.input_tokens, usage.output_tokens)
 
 
 def _debug_candidates(urls: list[str], rendered: bool):
@@ -138,10 +146,10 @@ def _debug_candidates(urls: list[str], rendered: bool):
         if count >= MAX_SOURCES:
             break
         count += 1
-        print(f"\n--- [{count}] Extracted text from {url} ({len(text)} chars) ---")
-        print(text[:2000])
+        log.info("\n--- [%d] Extracted text from %s (%d chars) ---", count, url, len(text))
+        log.info(text[:2000])
         if len(text) > 2000:
-            print(f"\n... ({len(text) - 2000} more chars)")
+            log.info("\n... (%d more chars)", len(text) - 2000)
 
 
 if __name__ == "__main__":

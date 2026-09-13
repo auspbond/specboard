@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -6,6 +7,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fetcher import fetch_text, fetch_rendered
 from extractor import extract
+
+log = logging.getLogger("pilot")
+if not log.handlers:
+    log.setLevel(logging.INFO)
+    _handler = logging.StreamHandler(sys.stdout)
+    _handler.setFormatter(logging.Formatter("%(message)s"))
+    log.addHandler(_handler)
 
 
 GROUND_TRUTH_DIR = Path(__file__).parent / "ground_truth"
@@ -43,7 +51,7 @@ def compare(expected: dict, actual: dict) -> list[tuple[str, str, str]]:
 def run_eval():
     cases = load_cases()
     if not cases:
-        print("No ground truth files found.")
+        log.info("No ground truth files found.")
         return
 
     total_fields = 0
@@ -56,16 +64,16 @@ def run_eval():
         empty_fields = [k for k, v in expected.items()
                         if v == "" or v == []]
         if empty_fields:
-            print(f"\n{label}: SKIPPED (unfilled fields: {', '.join(empty_fields)})")
+            log.info("\n%s: SKIPPED (unfilled fields: %s)", label, ", ".join(empty_fields))
             continue
 
-        print(f"\n{label}:")
+        log.info("\n%s:", label)
 
         url = case.get("url")
         rendered = case.get("rendered", False)
 
         if url:
-            print(f"  Fetching: {url}")
+            log.info("  Fetching: %s", url)
             text = fetch_rendered(url) if rendered else fetch_text(url)
         else:
             from fetcher import search
@@ -73,7 +81,7 @@ def run_eval():
             from cli import fetch_with_fallback
             url, text = fetch_with_fallback(urls, rendered)
 
-        print("  Extracting...")
+        log.info("  Extracting...")
         board, usage = extract(text)
         actual = board.model_dump()
 
@@ -84,13 +92,13 @@ def run_eval():
         total_fields += num_fields
         total_correct += correct
 
-        print(f"  Score: {correct}/{num_fields} fields correct")
+        log.info("  Score: %d/%d fields correct", correct, num_fields)
         for field, exp, act in mismatches:
-            print(f"    {field}: expected {exp}, got {act}")
-        print(f"  Tokens — input: {usage.input_tokens}, output: {usage.output_tokens}")
+            log.info("    %s: expected %s, got %s", field, exp, act)
+        log.info("  Tokens — input: %d, output: %d", usage.input_tokens, usage.output_tokens)
 
-    print(f"\n{'=' * 40}")
-    print(f"Overall: {total_correct}/{total_fields} ({100 * total_correct / total_fields:.1f}%)")
+    log.info("\n%s", "=" * 40)
+    log.info("Overall: %d/%d (%.1f%%)", total_correct, total_fields, 100 * total_correct / total_fields)
 
 
 if __name__ == "__main__":
