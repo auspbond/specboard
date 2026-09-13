@@ -8,7 +8,7 @@ from ddgs import DDGS
 
 import cache
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 
 
 # ── Constants ──────────────────────────────────────────────────

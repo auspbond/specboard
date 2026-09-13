@@ -4,7 +4,7 @@ import logging
 import shutil
 from pathlib import Path
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 
 
 # ── Constants ──────────────────────────────────────────────────

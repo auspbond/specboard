@@ -1,5 +1,5 @@
 [project]
-name = "pilot"
+name = "specboard"
 version = "0.1.0"
 description = "LLM-powered motherboard specification extractor"
 requires-python = ">=3.11"
@@ -13,4 +13,4 @@ dependencies = [
 ]
 
 [project.scripts]
-pilot = "cli:main"
+specboard = "cli:main"

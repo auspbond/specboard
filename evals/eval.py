@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from fetcher import fetch_text, fetch_rendered
 from extractor import extract
 
-log = logging.getLogger("pilot")
+log = logging.getLogger("specboard")
 if not log.handlers:
     log.setLevel(logging.INFO)
     _handler = logging.StreamHandler(sys.stdout)

@@ -1,4 +1,4 @@
-# Pilot — Motherboard Spec Extractor
+# Specboard — Motherboard Spec Extractor
 
 An LLM-powered tool that searches for motherboard specification pages, extracts structured data using Claude, and merges results from multiple sources to fill gaps.
 
@@ -68,7 +68,7 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 
 ### Logging
 
-- **Named logger, no `basicConfig()`**: All modules log through `logging.getLogger("pilot")`. The handler is configured only in entry points (`cli.py`, `evals/eval.py`) — never via `basicConfig()`. This is deliberate: `basicConfig()` attaches a handler to the root logger, which causes every third-party library using Python's logging (urllib3, httpx, the Anthropic SDK, ddgs) to emit its own messages through your handler. A named logger avoids this entirely — third-party loggers stay silent because the root logger has no handler.
+- **Named logger, no `basicConfig()`**: All modules log through `logging.getLogger("specboard")`. The handler is configured only in entry points (`cli.py`, `evals/eval.py`) — never via `basicConfig()`. This is deliberate: `basicConfig()` attaches a handler to the root logger, which causes every third-party library using Python's logging (urllib3, httpx, the Anthropic SDK, ddgs) to emit its own messages through your handler. A named logger avoids this entirely — third-party loggers stay silent because the root logger has no handler.
 - **Log levels**: `info` for normal operational output, `warning` for recoverable issues (content validation skips, incomplete data after merge), `error` for failures (fetch exceptions, unparseable LLM responses, cache write errors).
 - **`%(message)s` format**: Output looks identical to plain `print()` — no timestamps or level prefixes. The structure is there for programmatic filtering if needed later.
 
