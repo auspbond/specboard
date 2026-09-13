@@ -66,6 +66,12 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **`--no-cache` flag**: Bypasses both caches for a fresh run without clearing stored entries.
 - **`--clear-cache` flag**: Wipes all cached pages and extractions. Can run standalone or before a query.
 
+### Logging
+
+- **Named logger, no `basicConfig()`**: All modules log through `logging.getLogger("pilot")`. The handler is configured only in entry points (`cli.py`, `evals/eval.py`) — never via `basicConfig()`. This is deliberate: `basicConfig()` attaches a handler to the root logger, which causes every third-party library using Python's logging (urllib3, httpx, the Anthropic SDK, ddgs) to emit its own messages through your handler. A named logger avoids this entirely — third-party loggers stay silent because the root logger has no handler.
+- **Log levels**: `info` for normal operational output, `warning` for recoverable issues (content validation skips, incomplete data after merge), `error` for failures (fetch exceptions, unparseable LLM responses, cache write errors).
+- **`%(message)s` format**: Output looks identical to plain `print()` — no timestamps or level prefixes. The structure is there for programmatic filtering if needed later.
+
 ### Evaluation
 
 - **Ground truth files**: Hand-verified JSON specs per board stored in `evals/ground_truth/`.
