@@ -27,6 +27,8 @@ _SYSTEM_PROMPT = (
     "- chipset: Manufacturer followed by chipset number "
     "(e.g. 'Intel Z790', 'AMD X670', 'AMD B650', 'Intel B760'). "
     "Always include the manufacturer.\n"
+    "- memory_type: Just the speed category "
+    "(e.g. 'DDR5', 'DDR4'). No speeds, frequencies, or other details.\n"
     "- audio_codec: Manufacturer followed by chip model "
     "(e.g. 'Realtek ALC4080', 'ESS ES9038Q2M'). Realtek chips start with 'ALC', "
     "ESS chips start with 'ES'. Always include the manufacturer.\n"
