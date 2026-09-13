@@ -17,6 +17,7 @@ class TestHasGaps:
             wifi_bluetooth="built-in",
             sata_ports=4,
             lan_speed_gbps=2.5,
+            dual_lan=False,
             audio_codec="ALC4080",
             video_ports=[VideoPort(type="HDMI 2.1", quantity=1)],
             pcie_slots=[PcieSlot(type="PCIe 5.0 x16", quantity=1)],
