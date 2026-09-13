@@ -16,7 +16,7 @@ _SCALAR_FIELDS = [
     ("memory_max_speed_mhz", "Max Speed (MHz)"),
     ("wifi_bluetooth", "WiFi/BT"),
     ("sata_ports", "SATA Ports"),
-    ("lan_speed_gbps", "LAN (Gbps)"),
+    ("lan_max_speed_gbps", "Max LAN (Gbps)"),
     ("dual_lan", "Dual LAN"),
     ("audio_codec", "Audio Codec"),
 ]
