@@ -54,10 +54,15 @@ def extract_with_gap_fill(candidates, rendered: bool) -> tuple[Motherboard, list
 
 # ── Helpers ────────────────────────────────────────────────────
 
+_OPTIONAL_LISTS = {"video_ports", "audio_jacks"}
+
+
 def has_gaps(board: Motherboard) -> list[str]:
     gaps = []
     for key, val in board.model_dump().items():
-        if val is None or val == []:
+        if val is None:
+            gaps.append(key)
+        elif val == [] and key not in _OPTIONAL_LISTS:
             gaps.append(key)
     return gaps
 

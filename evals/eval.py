@@ -61,8 +61,9 @@ def run_eval():
         label = case["file"].replace(".json", "").replace("_", " ").title()
         expected = case["expected"]
 
+        optional_empty = {"video_ports", "audio_jacks"}
         empty_fields = [k for k, v in expected.items()
-                        if v == "" or v == []]
+                        if (v == "" or v == []) and k not in optional_empty]
         if empty_fields:
             log.info("\n%s: SKIPPED (unfilled fields: %s)", label, ", ".join(empty_fields))
             continue
