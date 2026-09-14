@@ -1,5 +1,5 @@
 from schemas import Motherboard, PcieSlot, M2Slot, UsbPort, AudioJack, VideoPort
-from spec_merger import has_gaps, merge, _entry_key, _union_lists
+from spec_merger import has_gaps, merge, _entry_key, _union_lists, _OPTIONAL_LISTS
 
 
 class TestHasGaps:
@@ -38,6 +38,12 @@ class TestHasGaps:
         gaps = has_gaps(board)
         assert "pcie_slots" in gaps
         assert "usb_ports" in gaps
+
+    def test_optional_empty_lists_not_gaps(self):
+        board = Motherboard(name="Test")
+        gaps = has_gaps(board)
+        for field in _OPTIONAL_LISTS:
+            assert field not in gaps
 
     def test_name_present_not_a_gap(self):
         board = Motherboard(name="Test Board")
