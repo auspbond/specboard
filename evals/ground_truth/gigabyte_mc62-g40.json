@@ -1,0 +1,66 @@
+{
+  "query": "GIGABYTE MC62-G40",
+  "url": "https://www.newegg.com/gigabyte-mc62-g40-amd-ryzen/p/N82E16813145382",
+  "rendered": true,
+  "expected": {
+  "name": "MC62-G40",
+  "manufacturer": "GIGABYTE",
+  "chipset": "AMD WRX80",
+  "socket": "sWRX8",
+  "form_factor": "CEB",
+  "video_ports": [
+    {
+      "type": "VGA",
+      "quantity": 1
+    }
+  ],
+  "memory_type": "DDR4",
+  "memory_max_gb": 2048,
+  "memory_max_speed_mhz": 3200,
+  "memory_slots": 8,
+  "pcie_slots": [
+    {
+      "type": "PCIe 4.0 x16",
+      "quantity": 6
+    },
+    {
+      "type": "PCIe 4.0 x8",
+      "quantity": 1
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 2280 Gen4x4/SATA",
+      "quantity": 2
+    },
+    {
+      "type": "M.2 2230 Key E",
+      "quantity": 1
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2 Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2",
+      "quantity": 5
+    }
+  ],
+  "wifi_bluetooth": "optional module",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Audio Jack",
+      "quantity": 3
+    }
+  ],
+  "sata_ports": 4,
+  "lan_max_speed_gbps": 10.0,
+  "dual_lan": true,
+  "audio_codec": "Realtek ALC4080"
+}
+}

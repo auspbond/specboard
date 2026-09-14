@@ -1,0 +1,102 @@
+{
+  "query": "ASRock B850 PRO RS WIFI",
+  "url": "https://www.asrock.com/mb/AMD/B850%20Pro%20RS%20WiFi/index.asp",
+  "rendered": true,
+  "expected": {
+  "name": "B850 Pro RS WiFi",
+  "manufacturer": "ASRock",
+  "chipset": "AMD B850",
+  "socket": "AM5",
+  "form_factor": "ATX",
+  "video_ports": [
+    {
+      "type": "HDMI 2.1",
+      "quantity": 1
+    },
+    {
+      "type": "USB 3.2 Gen1 Type-C",
+      "quantity": 1
+    }
+  ],
+  "memory_type": "DDR5",
+  "memory_max_gb": 256,
+  "memory_max_speed_mhz": 8000,
+  "memory_slots": 4,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 1
+    },
+    {
+      "type": "PCIe 4.0 x16 (x4 mode)",
+      "quantity": 1
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 2280 Gen5x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2280 Gen4x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2280 Gen4x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2280 Gen3x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2230 Key E",
+      "quantity": 1
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2 Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen1 Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen1",
+      "quantity": 4
+    },
+    {
+      "location": "rear",
+      "type": "USB 2.0",
+      "quantity": 6
+    }
+  ],
+  "wifi_bluetooth": "built-in",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Line In",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "Line Out",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "Mic In",
+      "quantity": 1
+    }
+  ],
+  "sata_ports": 4,
+  "lan_max_speed_gbps": 2.5,
+  "dual_lan": false,
+  "audio_codec": "Realtek ALC897"
+}
+}

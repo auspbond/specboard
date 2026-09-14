@@ -1,0 +1,88 @@
+{
+  "query": "ASUS PRIME Z890M-PLUS WIFI",
+  "url": "https://www.asus.com/us/motherboards-components/motherboards/prime/prime-z890m-plus-wifi/techspec/",
+  "rendered": true,
+  "expected": {
+  "name": "PRIME Z890M-PLUS WIFI",
+  "manufacturer": "ASUS",
+  "chipset": "Intel Z890",
+  "socket": "LGA1851",
+  "form_factor": "mATX",
+  "video_ports": [
+    {
+      "type": "DisplayPort 1.4",
+      "quantity": 1
+    },
+    {
+      "type": "HDMI 2.1",
+      "quantity": 1
+    },
+    {
+      "type": "USB 20Gbps Type-C",
+      "quantity": 1
+    }
+  ],
+  "memory_type": "DDR5",
+  "memory_max_gb": 256,
+  "memory_max_speed_mhz": 8666,
+  "memory_slots": 4,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 1
+    },
+    {
+      "type": "PCIe 4.0 x16 (x4 mode)",
+      "quantity": 1
+    },
+    {
+      "type": "PCIe 4.0 x16 (x1 mode)",
+      "quantity": 2
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 2280 Gen5x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2280 Gen4x4",
+      "quantity": 2
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 20Gbps Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 10Gbps",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 5Gbps",
+      "quantity": 4
+    },
+    {
+      "location": "rear",
+      "type": "USB 2.0",
+      "quantity": 2
+    }
+  ],
+  "wifi_bluetooth": "built-in",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Audio Jack",
+      "quantity": 3
+    }
+  ],
+  "sata_ports": 6,
+  "lan_max_speed_gbps": 2.5,
+  "dual_lan": false,
+  "audio_codec": "Realtek"
+}
+}
