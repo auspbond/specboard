@@ -1,0 +1,88 @@
+{
+  "query": "ASUS TUF GAMING X870-PLUS WIFI",
+  "url": "https://www.asus.com/au/motherboards-components/motherboards/tuf-gaming/tuf-gaming-x870-plus-wifi/techspec/",
+  "rendered": true,
+  "expected": {
+  "name": "TUF GAMING X870-PLUS WIFI",
+  "manufacturer": "ASUS",
+  "chipset": "AMD X870",
+  "socket": "AM5",
+  "form_factor": "ATX",
+  "video_ports": [
+    {
+      "type": "HDMI 2.1",
+      "quantity": 1
+    },
+    {
+      "type": "USB4",
+      "quantity": 2
+    }
+  ],
+  "memory_type": "DDR5",
+  "memory_max_gb": 256,
+  "memory_max_speed_mhz": 8000,
+  "memory_slots": 4,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 1
+    },
+	{
+      "type": "PCIe 4.0 x16 (x8/x4 mode)",
+      "quantity": 1
+    },
+    {
+      "type": "PCIe 4.0 x16 (x4 mode)",
+      "quantity": 1
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 2280 Gen5x4",
+      "quantity": 2
+    },
+    {
+      "type": "M.2 2280 Gen4x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 22110 Gen4x4",
+      "quantity": 1
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB4 (40Gbps) Type-C",
+      "quantity": 2
+    },
+    {
+      "location": "rear",
+      "type": "USB 10Gbps",
+      "quantity": 3
+    },
+    {
+      "location": "rear",
+      "type": "USB 5Gbps",
+      "quantity": 4
+    },
+    {
+      "location": "rear",
+      "type": "USB 2.0",
+      "quantity": 1
+    }
+  ],
+  "wifi_bluetooth": "built-in",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Audio Jack",
+      "quantity": 5
+    }
+  ],
+  "sata_ports": 2,
+  "lan_max_speed_gbps": 2.5,
+  "dual_lan": false,
+  "audio_codec": "Realtek ALC1220P"
+}
+}

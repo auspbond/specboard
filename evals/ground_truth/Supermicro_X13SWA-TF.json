@@ -1,0 +1,63 @@
+{
+  "query": "Supermicro X13SWA-TF",
+  "url": "https://www.supermicro.com/en/products/motherboard/x13swa-tf",
+  "rendered": true,
+  "expected": {
+  "name": "X13SWA-TF",
+  "manufacturer": "Supermicro",
+  "chipset": "Intel W790",
+  "socket": "LGA4677",
+  "form_factor": "E-ATX",
+  "video_ports": [
+    {
+      "type": "VGA",
+      "quantity": 1
+    }
+  ],
+  "memory_type": "DDR5",
+  "memory_max_gb": 2048,
+  "memory_max_speed_mhz": 4800,
+  "memory_slots": 16,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 6
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 22110 Gen5x4",
+      "quantity": 4
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 2.0",
+      "quantity": 2
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2x1",
+      "quantity": 4
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2x2 Type-C",
+      "quantity": 1
+    }
+  ],
+  "wifi_bluetooth": "none",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Audio Jack",
+      "quantity": 1
+    }
+  ],
+  "sata_ports": 8,
+  "lan_max_speed_gbps": 10.0,
+  "dual_lan": true,
+  "audio_codec": "Realtek ALC888S"
+}
+}
