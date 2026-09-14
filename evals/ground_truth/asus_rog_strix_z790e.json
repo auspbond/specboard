@@ -1,0 +1,89 @@
+{
+  "query": "ASUS ROG STRIX Z790-E Gaming WiFi",
+  "url": "https://rog.asus.com/motherboards/rog-strix/rog-strix-z790-e-gaming-wifi-model/",
+  "rendered": true,
+  "expected": {
+  "name": "ROG STRIX Z790-E GAMING WIFI",
+  "manufacturer": "ASUS",
+  "chipset": "Intel Z790",
+  "socket": "LGA1700",
+  "form_factor": "ATX",
+  "video_ports": [
+    {
+      "type": "DisplayPort 1.4",
+      "quantity": 1
+    },
+    {
+      "type": "HDMI 2.1",
+      "quantity": 1
+    }
+  ],
+  "memory_type": "DDR5",
+  "memory_max_gb": 192,
+  "memory_max_speed_mhz": 7800,
+  "memory_slots": 4,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 1
+    },
+    {
+      "type": "PCIe 4.0 x16 (x4 mode)",
+      "quantity": 2
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 22110 Gen5x4",
+      "quantity": 1
+    },
+    {
+      "type": "M.2 2280 Gen4x4",
+      "quantity": 3
+    },
+    {
+      "type": "M.2 2280 Gen4x4/SATA",
+      "quantity": 1
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen 2x2 Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen 2 Type-C",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen 2",
+      "quantity": 6
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen 1",
+      "quantity": 4
+    }
+  ],
+  "wifi_bluetooth": "built-in",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Audio Jack",
+      "quantity": 5
+    },
+    {
+      "location": "rear",
+      "type": "S/PDIF Out",
+      "quantity": 1
+    }
+  ],
+  "sata_ports": 4,
+  "lan_max_speed_gbps": 2.5,
+  "dual_lan": false,
+  "audio_codec": "Realtek ALC4080"
+}
+}

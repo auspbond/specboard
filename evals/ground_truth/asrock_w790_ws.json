@@ -1,0 +1,80 @@
+{
+  "query": "ASRock W790 WS",
+  "url": "https://www.asrock.com/mb/Intel/W790%20WS/index.asp",
+  "rendered": true,
+  "expected": {
+  "name": "W790 WS",
+  "manufacturer": "ASRock",
+  "chipset": "Intel W790",
+  "socket": "LGA4677",
+  "form_factor": "EATX",
+  "video_ports": [],
+  "memory_type": "DDR5",
+  "memory_max_gb": 2048,
+  "memory_max_speed_mhz": 6800,
+  "memory_slots": 8,
+  "pcie_slots": [
+    {
+      "type": "PCIe 5.0 x16",
+      "quantity": 2
+    },
+	{
+      "type": "PCIe 5.0 x8",
+      "quantity": 2
+    },
+    {
+      "type": "PCIe 4.0 x16 (x4 mode)",
+      "quantity": 1
+    }
+  ],
+  "m2_slots": [
+    {
+      "type": "M.2 2280 Gen5x4",
+      "quantity": 4
+    },
+    {
+      "type": "M.2 2230 Key E",
+      "quantity": 1
+    }
+  ],
+  "usb_ports": [
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen2",
+      "quantity": 2
+    },
+    {
+      "location": "rear",
+      "type": "USB 3.2 Gen1",
+      "quantity": 4
+    },
+    {
+      "location": "rear",
+      "type": "Thunderbolt 4 Type-C",
+      "quantity": 2
+    }
+  ],
+  "wifi_bluetooth": "built-in",
+  "audio_jacks": [
+    {
+      "location": "rear",
+      "type": "Line Out",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "Mic In",
+      "quantity": 1
+    },
+    {
+      "location": "rear",
+      "type": "S/PDIF Out",
+      "quantity": 1
+    }
+  ],
+  "sata_ports": 8,
+  "lan_max_speed_gbps": 10.0,
+  "dual_lan": true,
+  "audio_codec": "Realtek ALC897"
+}
+}
