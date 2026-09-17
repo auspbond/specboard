@@ -2,6 +2,12 @@
 
 An LLM-powered tool that searches for motherboard specification pages, extracts structured data using Claude, and merges results from multiple sources to fill gaps.
 
+## Why
+
+I wanted a portfolio project that showed real AI engineering — not a chatbot wrapper, but something that solves a messy real-world problem end to end. Motherboard specs are scattered across manufacturer sites, review pages, and retailer listings, all formatted differently. Turning that into clean structured data is exactly the kind of task where LLMs shine and traditional scraping breaks down.
+
+It's also a tool I actually use.
+
 ## How It Works
 
 1. **Search** — Queries DuckDuckGo for the board name, returns up to 10 results ranked by relevance and manufacturer priority.
@@ -46,7 +52,7 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **Tuned system prompt**: Field-level guidance for each complex field, developed iteratively from real extraction failures:
   - PCIe slots: Distinguishes physical slot size from electrical bandwidth mode (e.g., "PCIe 4.0 x16 (x4 mode)").
   - M.2 slots: Requires verbal generation format ("Gen5x4" not "PCIe 5.0 x4") and form factor. Prefers 2280 when multiple sizes are supported.
-  - USB/Audio: Separates rear panel ports from front panel (internal header) ports.
+  - USB/Audio: Rear panel (back I/O) ports only — front panel headers are too inconsistently documented to extract reliably.
   - WiFi/Bluetooth: Three-state enum — "built-in", "optional module" (has a Key E slot but no card), or "none".
 - **Nullable core fields**: Fields like name, chipset, and socket accept null so partial extraction returns usable data instead of crashing.
 - **JSON recovery**: The LLM sometimes wraps JSON in markdown fences or includes preamble text. The parser strips fences and falls back to finding the first `{...}` block.
@@ -86,6 +92,12 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 - **Field-level scoring**: Each field is compared individually. List fields use set comparison on their key tuples (order-independent). Scalar fields use exact match.
 - **Skip unfilled**: Ground truth templates with empty fields are skipped rather than scored, so partially filled templates don't produce misleading scores.
 
+## Eval
+
+- **10 boards** across 5 manufacturers (ASUS, MSI, Gigabyte, ASRock, Supermicro), sourced randomly from Newegg listings — not cherry-picked.
+- **94.7% field-level accuracy** (143/151 fields correct). Scoring is strict: one wrong entry in a list field (e.g., missing a USB port) fails the entire field.
+- **Ground truth is hand-verified** — every field checked against the manufacturer's spec page by a human. That's the only way to get reliable ground truth for this kind of extraction.
+
 ## Usage
 
 ```bash
@@ -114,7 +126,7 @@ python specboard.py --clear-cache
 python specboard.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
 # Compare two boards side by side
-python specboard.py "ASUS ROG STRIX Z790-E Gaming WiFi" --compare "MSI MEG Z790 ACE MAX" --rendered
+python specboard.py --compare "ASUS ROG STRIX Z790-E Gaming WiFi" "MSI MEG Z790 ACE MAX" --rendered
 
 # Run evaluation against ground truth
 python evals/eval.py
