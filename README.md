@@ -116,6 +116,10 @@ python specboard.py --result 3 "MSI MEG X870E ACE MAX"
 # Debug: see fetched text without sending to LLM
 python specboard.py --debug "ASRock X670E PG Lightning"
 
+# Server/workstation boards work too
+python specboard.py "Supermicro X13SWA-TF"
+python specboard.py "ASRock W790 WS"
+
 # Bypass cache for a fresh fetch + extraction
 python specboard.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
 
