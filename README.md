@@ -95,7 +95,7 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 ## Eval
 
 - **10 boards** across 5 manufacturers (ASUS, MSI, Gigabyte, ASRock, Supermicro), sourced randomly from Newegg listings — not cherry-picked.
-- **94.2% field-level accuracy** (143/152 fields correct). Scoring is strict: one wrong entry in a list field (e.g., missing a USB port) fails the entire field.
+- **92–96% field-level accuracy** across runs (152 fields scored). Scoring is strict: one wrong entry in a list field (e.g., missing a USB port) fails the entire field.
 - **Ground truth is hand-verified** — every field checked against the manufacturer's spec page by a human. That's the only way to get reliable ground truth for this kind of extraction.
 
 ## Usage
