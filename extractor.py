@@ -99,6 +99,7 @@ def extract(text: str) -> tuple[Motherboard, anthropic.types.Usage]:
     response = client.messages.create(
         model="claude-haiku-4-5",
         max_tokens=4096,
+        temperature=0,
         system=_SYSTEM_PROMPT,
         messages=[
             {
