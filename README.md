@@ -102,35 +102,35 @@ evals/eval.py    — Evaluation framework comparing extraction against ground tr
 
 ```bash
 # Search and extract (auto-fallback through results)
-python specboard.py "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py "ASUS PRIME Z890M-PLUS WIFI"
 
 # Use Playwright for JS-heavy pages
-python specboard.py --rendered "GIGABYTE X870 AORUS STEALTH ICE"
+python specboard.py --rendered "ASRock B850 Pro RS WiFi"
 
 # Extract from a specific URL
 python specboard.py --url "https://example.com/motherboard/specs"
 
 # Pick a specific search result
-python specboard.py --result 3 "MSI MEG X870E ACE MAX"
+python specboard.py --result 3 "MSI PRO B850M-A WIFI"
 
 # Debug: see fetched text without sending to LLM
 python specboard.py --debug "ASRock X670E PG Lightning"
 
-# Server/workstation boards work too
+# Server/workstation boards
 python specboard.py "Supermicro X13SWA-TF"
 python specboard.py "ASRock W790 WS"
 
 # Bypass cache for a fresh fetch + extraction
-python specboard.py --no-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py --no-cache "ASUS PRIME Z890M-PLUS WIFI"
 
 # Clear all cached pages and extractions
 python specboard.py --clear-cache
 
 # Clear cache, then run a fresh query
-python specboard.py --clear-cache "ASUS ROG STRIX Z790-E Gaming WiFi"
+python specboard.py --clear-cache "ASRock B850 Pro RS WiFi"
 
 # Compare two boards side by side
-python specboard.py --compare "ASUS ROG STRIX Z790-E Gaming WiFi" "MSI MEG Z790 ACE MAX" --rendered
+python specboard.py --compare "ASUS PRIME Z890M-PLUS WIFI" "MSI PRO B850M-A WIFI" --rendered
 
 # Run evaluation against ground truth
 python evals/eval.py
